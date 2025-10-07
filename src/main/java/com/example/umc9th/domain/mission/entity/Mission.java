@@ -1,11 +1,14 @@
 package com.example.umc9th.domain.mission.entity;
 
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -23,9 +26,8 @@ public class Mission {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_mission_id")
-    private MemberMission memberMission;
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.REMOVE)
+    private List<MemberMission> memberMissionList = new ArrayList<>();
 
     @Column(name = "content", nullable = false)
     private String content;

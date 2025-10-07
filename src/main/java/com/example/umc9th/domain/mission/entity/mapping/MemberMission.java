@@ -28,7 +28,8 @@ public class MemberMission extends BaseEntity {
     private Mission mission;
 
     @Column(name = "status", nullable = false)
-    private boolean status;
+    @Builder.Default
+    private boolean status = false;
 
 
 }

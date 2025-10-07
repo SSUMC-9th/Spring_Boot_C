@@ -44,7 +44,8 @@ public class Store extends BaseEntity{
     private String address;
 
     @Column(name = "status", nullable = false)
-    private boolean status;
+    @Builder.Default
+    private boolean status = false;
 
     @Column(name = "category", length = 10, nullable = false)
     private String category;

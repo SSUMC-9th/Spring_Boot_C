@@ -33,11 +33,11 @@ public class Member extends BaseEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberTerm> memberTermList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member")
     private List<Review> reviewList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private MemberMission memberMissionList;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<MemberMission> memberMissionList = new ArrayList<>();
 
 
 
@@ -56,10 +56,12 @@ public class Member extends BaseEntity{
     private String address;
 
     @Column(name = "status", nullable = false)
-    private boolean status;
+    @Builder.Default
+    private boolean status = false;
 
     @Column(name = "point", nullable = false)
-    private Long point;
+    @Builder.Default
+    private Long point = 0L;
 
     @Column(name = "email", length = 30, nullable = false)
     private String email;
