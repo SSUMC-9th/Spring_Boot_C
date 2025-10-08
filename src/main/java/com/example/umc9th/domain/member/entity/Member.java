@@ -3,6 +3,7 @@ package com.example.umc9th.domain.member.entity;
 import com.example.umc9th.domain.member.entity.mapping.MemberFood;
 import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc9th.domain.member.enums.Gender;
+import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,12 +54,16 @@ public class Member extends BaseEntity {
     @Column(name = "point")
     private int point;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    @Column(name = "inactive_at")
+    private LocalDateTime inactiveAt;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    // 멤버가 지워지면 연관 테이블 데이터도 지워짐
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<MemberTerm> memberTermList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberMission> memberMissionList = new ArrayList<>();
 }

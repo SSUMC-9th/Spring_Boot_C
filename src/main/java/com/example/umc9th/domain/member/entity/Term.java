@@ -22,8 +22,6 @@ public class Term {
 
     @Column(name = "name")
     @Enumerated(EnumType.STRING)
-    private TermName name;
-
-    @OneToMany(mappedBy = "term")
-    private List<MemberTerm> memberTermList = new ArrayList<>();
+    @Builder.Default
+    private TermName name = TermName.term0;
 }

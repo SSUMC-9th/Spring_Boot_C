@@ -24,6 +24,6 @@ public class Food {
     @Enumerated(EnumType.STRING)
     private FoodName name;
 
-    @OneToMany(mappedBy = "food")
-    private List<MemberFood> memberFoodList = new ArrayList<>();
+//    @OneToMany(mappedBy = "food")
+//    private List<MemberFood> memberFoodList = new ArrayList<>();
 }
