@@ -4,6 +4,7 @@ import com.example.umc9th.domain.member.entity.mapping.MemberFood;
 import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc9th.domain.member.enums.Gender;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -57,13 +58,16 @@ public class Member extends BaseEntity {
     @Column(name = "inactive_at")
     private LocalDateTime inactiveAt;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     // 멤버가 지워지면 연관 테이블 데이터도 지워짐
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTerm> memberTermList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberMission> memberMissionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE,  orphanRemoval = true) // 내가 작성한 리뷰 조회
+    private List<Review> reviewList = new ArrayList<>();
 }
