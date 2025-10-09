@@ -3,7 +3,7 @@ package com.example.umc9th.domain.store.entity;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.global.entity.BaseEntity;
-import com.example.umc9th.domain.member.enums.*;
+import com.example.umc9th.domain.store.enums.*;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,6 +48,7 @@ public class Store extends BaseEntity{
     private boolean status = false;
 
     @Column(name = "category", length = 10, nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
 }
