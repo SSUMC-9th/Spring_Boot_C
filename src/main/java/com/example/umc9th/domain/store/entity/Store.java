@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.store.entity;
 
 import com.example.umc9th.domain.mission.entity.Mission;
+import com.example.umc9th.domain.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,11 @@ public class Store {
     // Store가 어떤 미션들을 가진지 확인하려면 필요
     @OneToMany(mappedBy = "store")
     private List<Mission> missionList = new ArrayList<>();
+
+    // Store가 어떤 미션들을 가진지 확인하려면 필요
+    @OneToMany(mappedBy = "store")
+    private List<Review> reviewList = new ArrayList<>();
+
 
 
 }
