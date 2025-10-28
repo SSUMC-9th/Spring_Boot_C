@@ -49,6 +49,6 @@ public class Store extends BaseEntity{
 
     @Column(name = "category", length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private ECategory category;
 
 }

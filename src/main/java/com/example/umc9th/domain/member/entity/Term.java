@@ -26,6 +26,6 @@ public class Term {
 
     @Column(name = "term", nullable  = false)
     @Enumerated(EnumType.STRING)
-    private Terms term;
+    private ETerm term;
 
 }
