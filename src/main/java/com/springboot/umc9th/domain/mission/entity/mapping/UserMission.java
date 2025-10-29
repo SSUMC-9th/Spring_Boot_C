@@ -16,7 +16,7 @@ public class UserMission extends BaseEntity {
 
     @Column(name = "complete",nullable = false)
     @Builder.Default //기본은 실패
-    private boolean complete = false;
+    private Boolean complete = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
