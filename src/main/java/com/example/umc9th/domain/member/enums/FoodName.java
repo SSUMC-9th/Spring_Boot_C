@@ -1,5 +1,10 @@
 package com.example.umc9th.domain.member.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum FoodName {
     KOREAN("한식"),
     JAPANESE("일식"),
@@ -15,11 +20,6 @@ public enum FoodName {
     ASIAN("아시안푸드");
 
     private final String label;
-
-    FoodName(String label) {
-        this.label = label;
-    }
-
     public String getLabel() {
         return label;
     }

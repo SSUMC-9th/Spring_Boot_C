@@ -54,15 +54,19 @@ public class Member extends BaseEntity {
     private LocalDateTime inactiveAt;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default //  -> Builder 사용 시에도 기본값이 유지
     // 멤버가 지워지면 연관 테이블 데이터도 지워짐
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private List<MemberTerm> memberTermList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE,  orphanRemoval = true) // 내가 작성한 리뷰 조회
+    @Builder.Default
     private List<Review> reviewList = new ArrayList<>();
 }
