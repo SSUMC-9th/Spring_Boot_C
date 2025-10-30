@@ -1,16 +1,11 @@
 package com.example.umc9th.domain.mission.entity;
 
-import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
-import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.store.entity.Store;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Builder
