@@ -40,14 +40,13 @@ public class Member extends BaseEntity{
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
 
-
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private Gender gender = Gender.NONE;
+    private EGender gender = EGender.NONE;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
@@ -66,7 +65,7 @@ public class Member extends BaseEntity{
     @Column(name = "email", length = 30, nullable = false)
     private String email;
 
-    @Column(name = "phone_num", length = 15, nullable = true)
+    @Column(name = "phone_num", length = 15)
     @Builder.Default
     private String phoneNum = null;
 

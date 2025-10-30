@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.store.entity;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.mission.entity.Mission;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,9 @@ public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "region")
+    private List<Member> memberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "region")
     private List<Store> storeList = new ArrayList<>();
