@@ -5,6 +5,6 @@ import com.example.umc9th.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQueryDsl {
 
 }

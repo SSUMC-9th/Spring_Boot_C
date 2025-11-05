@@ -21,11 +21,11 @@ public class MissionService {
     private final MemberRepository memberRepository;
 
     // 진행 중, 진행 완료인 미션 조회
-    public Page<MissionResponseDto> getMyMissions(Long memberId, int page, int size) {
+    public Page<MissionResponseDto> getMyMissions(int memberId, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size); // 원하는 사이즈로 페이징
 
-        Member member = memberRepository.findById(Math.toIntExact(memberId)).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
 
         List<EStatus> statuses = List.of(EStatus.IN_PROGRESS, EStatus.COMPLETED);
 
