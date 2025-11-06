@@ -16,7 +16,7 @@ import java.util.List;
 public class Local extends BaseEntity {
 
     @Column(name ="local",length = 50)
-    private String local;
+    private String name;
 
     @OneToMany(mappedBy = "local")
     private List<Store> storeList =new ArrayList<>();

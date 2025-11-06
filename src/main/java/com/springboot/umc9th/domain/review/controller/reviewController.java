@@ -1,5 +1,6 @@
 package com.springboot.umc9th.domain.review.controller;
 
+import com.springboot.umc9th.domain.review.dto.MyReviewResponse;
 import com.springboot.umc9th.domain.review.entity.Review;
 import com.springboot.umc9th.domain.review.service.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping ("/reviews")
 public class reviewController {
 
-    private final ReviewQueryService reviewQueryService; // ✅ 의존성 주입
+    private final ReviewQueryService reviewQueryService;
 
 
     @GetMapping("/search")
@@ -26,11 +27,11 @@ public class reviewController {
 
 
     @GetMapping("/my")
-    public List<Review> getMyReviews(
+    public List<MyReviewResponse> searchMyReview(
             @RequestParam Long memberId,
-            @RequestParam(required = false) String storeName,
-            @RequestParam(required = false) Integer score
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String type
     ) {
-        return reviewQueryService.searchMyReviews(memberId, storeName, score);
+        return reviewQueryService.searchMyReviews(memberId, query, type);
     }
 }
