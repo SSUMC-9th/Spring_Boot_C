@@ -20,8 +20,9 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "region")
-    private List<Member> memberList = new ArrayList<>();
+// member의 address가 region을 포함하는지 모호해서 실행을 위해 주석 처리함
+//    @OneToMany(mappedBy = "region")
+//    private List<Member> memberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "region")
     private List<Store> storeList = new ArrayList<>();

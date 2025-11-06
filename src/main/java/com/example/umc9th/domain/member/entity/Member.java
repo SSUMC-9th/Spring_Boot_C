@@ -4,6 +4,7 @@ import com.example.umc9th.domain.member.entity.mapping.MemberPreference;
 import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.store.entity.Region;
 import com.example.umc9th.global.entity.BaseEntity;
 import com.example.umc9th.domain.member.enums.*;
 
@@ -39,7 +40,7 @@ public class Member extends BaseEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
-
+    // 컬럼
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
