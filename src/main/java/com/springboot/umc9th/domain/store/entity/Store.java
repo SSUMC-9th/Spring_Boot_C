@@ -28,7 +28,7 @@ public class Store extends BaseEntity {
     private String storeNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loacl")
+    @JoinColumn(name = "local_id")
     private Local local;
 
     @OneToMany(mappedBy = "store")

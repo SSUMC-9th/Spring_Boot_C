@@ -23,7 +23,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     @Query("SELECT m FROM Mission m " +
             "JOIN FETCH m.store s " +
             "JOIN FETCH s.local l " +
-            "LEFT JOIN FETCH m.userMissionList um " +
+            "LEFT JOIN m.userMissionList um " +
             "ON um.member.id = :memberId " +
             "WHERE l.id = :localId " +
             "AND m.id < :cursorId")
