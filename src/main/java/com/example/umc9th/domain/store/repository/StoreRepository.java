@@ -1,0 +1,13 @@
+package com.example.umc9th.domain.store.repository;
+
+import com.example.umc9th.domain.store.entity.Store;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface StoreRepository extends JpaRepository<Store, Long>, StoreQueryDSL {
+
+    // 지역(region) 기반 필터링
+    List<Store> findStoreByRegionName(String regionName);
+
+}
