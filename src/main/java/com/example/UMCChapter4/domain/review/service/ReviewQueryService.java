@@ -37,10 +37,16 @@ public class ReviewQueryService {
 
         //동적 쿼리: 검색 조건
         if (type.equals("location")) {
-            builder.and(review.store.location.name.eq(query));
+            builder.and(review.store.location.name.contains(query));
         }
         if (type.equals("rate")) {
-            builder.and(review.rate.eq(Float.parseFloat(query)));
+            Float rateParam = Float.parseFloat(query);
+            Float epsilon = 0.0001f; // 허용 오차
+
+            builder.and(
+                    review.rate.goe(rateParam - epsilon)
+                            .and(review.rate.loe(rateParam + epsilon))
+            );
         }
         if (type.equals("both")) {
 
@@ -50,7 +56,7 @@ public class ReviewQueryService {
 
             // 동적 쿼리
             builder.and(review.store.location.name.contains(firstQuery));
-            builder.and(review.rate.eq(Float.parseFloat(secondQuery)));
+            builder.and(review.rate.goe(Float.parseFloat(secondQuery)));
         }
 
         List<Review> reviewList = reviewRepository.searchReview(builder);
@@ -76,11 +82,17 @@ public class ReviewQueryService {
         BooleanBuilder builder = new BooleanBuilder().and(review.member.id.eq(memberId));
 
         if (type.equals("store")) {
-            builder.and(review.store.name.eq(query));
+            builder.and(review.store.name.contains(query));
         }
 
         if (type.equals("rate")) {
-            builder.and(review.rate.eq(Float.parseFloat(query)));
+            Float rateParam = Float.parseFloat(query);
+            Float epsilon = 0.0001f; // 허용 오차
+
+            builder.and(
+                    review.rate.goe(rateParam - epsilon)
+                            .and(review.rate.loe(rateParam + epsilon))
+            );
         }
 
         if (type.equals("both")) {
@@ -91,7 +103,14 @@ public class ReviewQueryService {
 
             // 동적 쿼리
             builder.and(review.store.name.contains(firstQuery));
-            builder.and(review.rate.eq(Float.parseFloat(secondQuery)));
+
+            Float rateParam = Float.parseFloat(query);
+            Float epsilon = 0.0001f; // 허용 오차
+
+            builder.and(
+                    review.rate.goe(rateParam - epsilon)
+                            .and(review.rate.loe(rateParam + epsilon))
+            );
         }
 
         List<Review> reviewList = reviewRepository.searchMyReview(builder);
