@@ -44,8 +44,8 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl{
 
         return queryFactory
                 .selectFrom(review)
-                .leftJoin(store).on(store.id.eq(review.store.id))
-                .leftJoin(location).on(location.id.eq(store.location.id))
+                .leftJoin(review.store, store).fetchJoin()
+                .leftJoin(store.location, location).fetchJoin()
                 .where(predicate)
                 .fetch();
     }

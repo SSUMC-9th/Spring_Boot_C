@@ -3,6 +3,9 @@ package com.example.UMCChapter4.domain.review.service;
 import com.example.UMCChapter4.domain.member.entity.QMember;
 import com.example.UMCChapter4.domain.review.entity.QReview;
 import com.example.UMCChapter4.domain.review.entity.Review;
+import com.example.UMCChapter4.domain.review.exception.ReviewException;
+import com.example.UMCChapter4.domain.review.exception.code.ReviewErrorCode;
+import com.example.UMCChapter4.domain.review.repository.ReviewQueryDsl;
 import com.example.UMCChapter4.domain.review.repository.ReviewQueryDslImpl;
 import com.example.UMCChapter4.domain.review.repository.ReviewRepository;
 import com.example.UMCChapter4.domain.store.entity.QLocation;
@@ -34,10 +37,10 @@ public class ReviewQueryService {
 
         //동적 쿼리: 검색 조건
         if (type.equals("location")) {
-            builder.and(review.store.location.name.contains(query));
+            builder.and(review.store.location.name.eq(query));
         }
         if (type.equals("rate")) {
-            builder.and(review.rate.goe(Float.parseFloat(query)));
+            builder.and(review.rate.eq(Float.parseFloat(query)));
         }
         if (type.equals("both")) {
 
@@ -46,18 +49,25 @@ public class ReviewQueryService {
             String secondQuery = query.split("&")[1];
 
             // 동적 쿼리
-            builder.and(location.name.contains(firstQuery));
-            builder.and(review.rate.goe(Float.parseFloat(secondQuery)));
+            builder.and(review.store.location.name.contains(firstQuery));
+            builder.and(review.rate.eq(Float.parseFloat(secondQuery)));
         }
 
         List<Review> reviewList = reviewRepository.searchReview(builder);
+
+        // 임시 예외 처리
+        if (reviewList.isEmpty()) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_EXCEPTION);
+        }
+
+
         return reviewList;
     }
 
     //미션 가게별 별점별 리뷰
     public List<Review> searchMyReview(
-            String type, // 가게별, 별점별
-            String query,
+            String query, // 가게별, 별점별
+            String type,
             Long memberId
     ){
         QReview review = QReview.review;
@@ -66,11 +76,11 @@ public class ReviewQueryService {
         BooleanBuilder builder = new BooleanBuilder().and(review.member.id.eq(memberId));
 
         if (type.equals("store")) {
-            builder.and(store.name.contains(query));
+            builder.and(review.store.name.eq(query));
         }
 
         if (type.equals("rate")) {
-            builder.and(review.rate.goe(Float.parseFloat(query)));
+            builder.and(review.rate.eq(Float.parseFloat(query)));
         }
 
         if (type.equals("both")) {
@@ -80,10 +90,17 @@ public class ReviewQueryService {
             String secondQuery = query.split("&")[1];
 
             // 동적 쿼리
-            builder.and(store.name.contains(firstQuery));
-            builder.and(review.rate.goe(Float.parseFloat(secondQuery)));
+            builder.and(review.store.name.contains(firstQuery));
+            builder.and(review.rate.eq(Float.parseFloat(secondQuery)));
         }
 
-        return reviewRepository.searchMyReview(builder);
+        List<Review> reviewList = reviewRepository.searchMyReview(builder);
+
+        // 임시 예외 처리
+        if (reviewList.isEmpty()) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_EXCEPTION);
+        }
+
+        return reviewList;
     }
 }

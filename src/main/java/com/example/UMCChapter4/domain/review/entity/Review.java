@@ -53,16 +53,4 @@ public class Review extends BaseEntity {
         return new Review(description, rate, member, store, null, null);
     }
 
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", rate=" + rate +
-                ", member=" + member +
-                ", store=" + store +
-                ", reviewPhotoList=" + reviewPhotoList +
-                ", reviewReplyList=" + reviewReplyList +
-                '}';
-    }
 }
