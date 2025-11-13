@@ -1,11 +1,14 @@
-package com.example.umc9th.domain.review.service;
+package com.example.umc9th.domain.review.service.query;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.entity.QMember;
-import com.example.umc9th.domain.review.dto.response.ReviewResponseDTO;
+import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
+import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.entity.QReview;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.repository.ReviewRepository;
 import com.example.umc9th.domain.store.entity.QStore;
+import com.example.umc9th.global.apiPayload.exception.GeneralException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import static com.example.umc9th.domain.store.entity.QRegion.region;
 public class ReviewQueryService {
 
     private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
 
 
     public List<Review> searchReview(String query, String type) {
@@ -67,7 +71,7 @@ public class ReviewQueryService {
 
     }
 
-    public List<ReviewResponseDTO> searchMyReview(Long memberId, String storeName, Double ratingRange) {
+    public List<Review> searchMyReview(Long memberId, String storeName, Double ratingRange) {
 
         // Q클래스 정의
         QReview review = QReview.review;
@@ -77,6 +81,10 @@ public class ReviewQueryService {
         // booleanBuilder 정의
         // memberId는 필수 조건으로 builder를 시작
         // builder는 이미 'r.member_id = [memberId]' 조건을 가지고 시작
+        // 회원 존재 여부 확인
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new GeneralException(MemberErrorCode.MEMBER_NOT_FOUND));
+
         BooleanBuilder builder = new BooleanBuilder(review.member.id.eq(memberId));
 
         // booleanBuilder 사용
