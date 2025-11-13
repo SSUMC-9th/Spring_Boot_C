@@ -38,4 +38,10 @@ public class TestController {
         GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, TestConverter.toExceptionDTO("This is Test!"));
     }
+
+    // slack test
+    @GetMapping("/error500")
+    public String triggerError() {
+        throw new TestException(GeneralErrorCode.INTERNAL_SERVER_ERROR);
+    }
 }
