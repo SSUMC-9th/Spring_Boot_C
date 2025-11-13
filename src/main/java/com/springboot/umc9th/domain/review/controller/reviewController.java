@@ -3,6 +3,8 @@ package com.springboot.umc9th.domain.review.controller;
 import com.springboot.umc9th.domain.review.dto.MyReviewResponse;
 import com.springboot.umc9th.domain.review.entity.Review;
 import com.springboot.umc9th.domain.review.service.ReviewQueryService;
+import com.springboot.umc9th.global.apiPayload.ApiResponse;
+import com.springboot.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +18,23 @@ public class reviewController {
 
     private final ReviewQueryService reviewQueryService;
 
-
     @GetMapping("/search")
-    public List<Review> searchReview(@RequestParam String query,@RequestParam Integer page,
-                                     @RequestParam String type) {
-
-        List<Review> result = reviewQueryService.searchReview(query,type);
-        return result;
+    public ApiResponse<List<Review>> searchReview(
+            @RequestParam String query,
+            @RequestParam Integer page,
+            @RequestParam String type
+    ) {
+        List<Review> result = reviewQueryService.searchReview(query, type);
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }
 
-
     @GetMapping("/my")
-    public List<MyReviewResponse> searchMyReview(
+    public ApiResponse<List<MyReviewResponse>> searchMyReview(
             @RequestParam Long memberId,
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String type
     ) {
-        return reviewQueryService.searchMyReviews(memberId, query, type);
+        List<MyReviewResponse> result = reviewQueryService.searchMyReviews(memberId, query, type);
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }
 }
