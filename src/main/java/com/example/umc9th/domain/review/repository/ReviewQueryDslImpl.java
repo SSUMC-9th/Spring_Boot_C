@@ -24,7 +24,6 @@ import static com.example.umc9th.domain.member.entity.QMember.member;
 @RequiredArgsConstructor
 public class ReviewQueryDslImpl implements ReviewQueryDsl{
 
-    private final ReviewRepository reviewRepository;
     private final EntityManager em;
 
 
