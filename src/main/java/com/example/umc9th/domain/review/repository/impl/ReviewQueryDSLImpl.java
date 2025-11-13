@@ -1,8 +1,6 @@
 package com.example.umc9th.domain.review.repository.impl;
 
 import com.example.umc9th.domain.member.entity.QMember;
-import com.example.umc9th.domain.review.dto.response.QReviewResponseDTO;
-import com.example.umc9th.domain.review.dto.response.ReviewResponseDTO;
 import com.example.umc9th.domain.review.entity.QReview;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.repository.ReviewQueryDSL;
@@ -44,7 +42,7 @@ public class ReviewQueryDSLImpl implements ReviewQueryDSL {
     }
 
     // 내가 작성한 리뷰 보기 API
-    public List<ReviewResponseDTO> searchMyReview(Predicate predicate) {
+    public List<Review> searchMyReview(Predicate predicate) {
         // JPA 세팅
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         // Q클래스 선언
@@ -54,10 +52,7 @@ public class ReviewQueryDSLImpl implements ReviewQueryDSL {
 
 
         return queryFactory
-                .select(
-                        // DTO Projection
-                        new QReviewResponseDTO(review.id, review.content, review.star, store.name, member.name)
-                )
+                .select(review)
                 .from(review)
                 // FETCH JOIN 적용
                 .join(review.store, store)

@@ -12,7 +12,7 @@ public interface ReviewQueryDSL {
     List<Review> searchReview(Predicate predicate);
 
     // 내가 작성한 리뷰 보기 API
-    List<ReviewResponseDTO> searchMyReview(Predicate predicate);
+    List<Review> searchMyReview(Predicate predicate);
 
 
 }
