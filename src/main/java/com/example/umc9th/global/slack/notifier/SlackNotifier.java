@@ -23,7 +23,7 @@ public class SlackNotifier {
 
     public void notifyServerError(Exception e, HttpServletRequest request) {
         // 로컬 환경이면 슬랙 알림 보내지 않음
-       //if ("local".equals(activeProfile)) return;
+       if ("local".equals(activeProfile)) return;
 
 
         String errorTitle = "*서버 에러 발생!*";

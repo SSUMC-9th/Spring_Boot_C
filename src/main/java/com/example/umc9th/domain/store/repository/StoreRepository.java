@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long>, StoreQueryDSL {
 
-    // 지역(region) 기반 필터링
-    List<Store> findStoreByRegionName(String regionName);
 
 }

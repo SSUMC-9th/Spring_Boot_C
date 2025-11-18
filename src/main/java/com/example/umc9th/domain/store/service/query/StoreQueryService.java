@@ -1,6 +1,5 @@
-package com.example.umc9th.domain.store.service;
+package com.example.umc9th.domain.store.service.query;
 
-import com.example.umc9th.domain.review.entity.QReview;
 import com.example.umc9th.domain.store.entity.QRegion;
 import com.example.umc9th.domain.store.entity.QStore;
 import com.example.umc9th.domain.store.entity.Store;

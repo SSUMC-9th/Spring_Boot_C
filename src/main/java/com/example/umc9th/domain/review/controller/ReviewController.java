@@ -7,10 +7,7 @@ import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewQueryService reviewQueryService;
+
 
 
     // query에 검색할 키워드를 넣고 type에 검색 조건을 넣음
@@ -48,5 +46,8 @@ public class ReviewController {
         List<ReviewResponseDTO.MyReview> result = ReviewConverter.toReviewDTOList(list);
         return ApiResponse.onSuccess(code, result);
     }
+
+    // 가게에 리뷰 추가
+   // @PostMapping("/{storeId}/reviews")
 
 }

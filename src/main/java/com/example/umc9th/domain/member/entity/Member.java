@@ -48,7 +48,8 @@ public class Member extends BaseEntity {
     private String email;
 
     @Column(name = "point")
-    private int point;
+    @Builder.Default
+    private Integer point=0;
 
     @Column(name = "inactive_at")
     private LocalDateTime inactiveAt;

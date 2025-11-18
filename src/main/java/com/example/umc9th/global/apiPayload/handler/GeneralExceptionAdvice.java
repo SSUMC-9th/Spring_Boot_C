@@ -9,8 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestControllerAdvice
@@ -42,6 +46,21 @@ public class GeneralExceptionAdvice {
                         code,
                         ex.getMessage()
                 ));
+    }
+
+    // 컨트롤러 메서드에서 @Valid 어노테이션 사용하여 DTO 의 유효성 검사 수행
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        // 검사에 실패한 필드와 그에 대한 메시지를 저장하는 Map
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
+
+        GeneralErrorCode code = GeneralErrorCode.VALID_FAIL;
+        ApiResponse<Map<String, String>> errorResponse = ApiResponse.onFailure(code, errors);
+
+        // 에러 코드, 메시지와 함께 errors 반환
+        return ResponseEntity.status(code.getStatus()).body(errorResponse);
     }
 
 }
