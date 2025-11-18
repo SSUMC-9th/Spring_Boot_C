@@ -1,20 +1,27 @@
 package com.example.umc9th.domain.review.controller;
 
 import com.example.umc9th.domain.review.converter.ReviewConverter;
+import com.example.umc9th.domain.review.dto.request.ReviewRequestDTO;
 import com.example.umc9th.domain.review.dto.response.ReviewResponseDTO;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.service.command.ReviewCommandService;
 import com.example.umc9th.domain.review.service.query.ReviewQueryService;
+import com.example.umc9th.global.annotation.ExistStore;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class ReviewController {
     private final ReviewQueryService reviewQueryService;
+    private final ReviewCommandService reviewCommandService;
 
 
 
@@ -48,6 +55,10 @@ public class ReviewController {
     }
 
     // 가게에 리뷰 추가
-   // @PostMapping("/{storeId}/reviews")
+    @PostMapping("/{storeId}/reviews")
+    public ApiResponse<ReviewResponseDTO.createReview> createReview(@PathVariable @ExistStore Long storeId, @RequestBody @Valid ReviewRequestDTO.createReview requestDTO) {
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviewCommandService.createReview(storeId, requestDTO));
+
+    }
 
 }
