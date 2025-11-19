@@ -21,7 +21,7 @@ public class MissionService {
     private final MemberRepository memberRepository;
 
     // 진행 중, 진행 완료인 미션 조회
-    public Page<MissionResponseDto> getMyMissions(int memberId, int page, int size) {
+    public Page<MissionResponseDto> getMyMissions(Long memberId, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size); // 원하는 사이즈로 페이징
 
@@ -41,7 +41,7 @@ public class MissionService {
 
         Pageable pageable = PageRequest.of(page, size);  // 원하는 사이즈로 페이징
 
-        Member member = memberRepository.findById(Math.toIntExact(memberId))    // memberId로 해당 유저의 엔티티 반환 (못찾을 시 예외 throw)
+        Member member = memberRepository.findById(memberId)    // memberId로 해당 유저의 엔티티 반환 (못찾을 시 예외 throw)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         Page<MissionResponseDto> missionPagebyRegion = memberMissionRepository.findMissionsBySelectedRegion(    // 매개변수

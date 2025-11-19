@@ -14,5 +14,4 @@ public class MyReviewDto {
     private String content;    // 리뷰 내용
     private Float ratingScore;   // 별점
     private LocalDate createdAt; // 작성일
-
 }

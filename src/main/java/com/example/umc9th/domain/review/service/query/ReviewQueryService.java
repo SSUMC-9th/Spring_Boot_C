@@ -1,8 +1,8 @@
-package com.example.umc9th.domain.review.service;
+package com.example.umc9th.domain.review.service.query;
 
 import com.example.umc9th.domain.review.converter.ReviewConverter;
 import com.example.umc9th.domain.review.dto.MyReviewDto;
-import com.example.umc9th.domain.review.dto.MyReviewResDto;
+import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
 import com.example.umc9th.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
