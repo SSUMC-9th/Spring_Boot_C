@@ -1,6 +1,8 @@
 package com.example.umc9th.domain.mission.repository;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.mission.dto.response.MyMissionResponseDTO;
+import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,5 +21,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
             "WHERE mm.member.id = :memberId and mm.status = :status " +
             "ORDER BY mm.id desc")
     Page<MyMissionResponseDTO> findByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") boolean status, Pageable pageable);
+
+    public boolean existsByMemberAndMission(Member member, Mission mission);
 
 }
