@@ -27,7 +27,8 @@ public class Mission extends BaseEntity {
     private String condition;
 
     @Column(name = "point", nullable = false)
-    private Integer points; // 0 초기화
+    @Builder.Default
+    private Integer points = 0; // 0 초기화
 
     @OneToMany(mappedBy = "mission", cascade = CascadeType.REMOVE) // mission - member_mission (1:N)
     private List<MemberMission> memberMissionList = new ArrayList<>();

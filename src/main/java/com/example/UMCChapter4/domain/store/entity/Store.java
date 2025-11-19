@@ -1,5 +1,6 @@
 package com.example.UMCChapter4.domain.store.entity;
 
+import com.example.UMCChapter4.domain.member.enums.Address;
 import com.example.UMCChapter4.domain.mission.entity.Mission;
 import com.example.UMCChapter4.domain.review.entity.Review;
 import com.example.UMCChapter4.global.entity.BaseEntity;
@@ -24,7 +25,10 @@ public class Store extends BaseEntity {
     private String name;
 
     @Column(name = "manager_number", nullable = false)
-    private long managerNumber;
+    private Long managerNumber;
+
+    @Column(name = "address", length = 10, nullable = false)
+    private Address address;
 
     @Column(name = "detail_address", length = 50, nullable = false)
     private String detailAddress;

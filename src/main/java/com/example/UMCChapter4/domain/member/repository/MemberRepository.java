@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    // 마이페이지 정보
+    // 마이페이지 정보 불러오는 쿼리
     @Query("""
     select new com.example.UMCChapter4.domain.member.dto.MyPageDto(
       m.email,

@@ -3,6 +3,7 @@ package com.example.UMCChapter4.domain.mission.repository;
 import com.example.UMCChapter4.domain.mission.dto.MyMissionStatusDto;
 import com.example.UMCChapter4.domain.mission.dto.LocationMemberMissionDto;
 import com.example.UMCChapter4.domain.mission.entity.MemberMission;
+import com.example.UMCChapter4.domain.mission.enums.EStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,14 +22,14 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     join mm.mission m
     join m.store s
     where mm.member.id = :memberId
-      and mm.complete = :complete
+      and mm.status = :status
       and (m.deadline >= :today)
     order by m.deadline asc, mm.id desc
     """)
     Page<MyMissionStatusDto> findMyMissions(
             @Param("memberId") Long memberId,
             @Param("today") LocalDate today,
-            @Param("complete") Boolean complete,
+            @Param("status") EStatus status,
             Pageable pageable
     );
 
@@ -43,7 +44,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     join m.store s
     where mm.member.id = :userId
       and s.location.id = :locationId
-      and mm.complete = false
+      and mm.status = com.example.UMCChapter4.domain.mission.enums.EStatus.PROGRESS
     order by m.deadline asc, mm.id asc
     """)
     Page<LocationMemberMissionDto> findMyLocationMissionsInProgress(
@@ -59,10 +60,13 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     join mm.mission m
     join m.store s
     where mm.member.id = :memberId
-      and mm.complete = true
+      and mm.status = com.example.UMCChapter4.domain.mission.enums.EStatus.COMPLETED
       and s.location.id = :locationId
     """)
-    long countMyLocationCompleted(@Param("memberId") Long memberId, @Param("locationId") Long locationId);
+    long countMyLocationCompleted(
+            @Param("memberId") Long memberId,
+            @Param("locationId") Long locationId
+    );
 
 
 }
