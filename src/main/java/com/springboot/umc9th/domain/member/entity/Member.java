@@ -57,6 +57,7 @@ public class Member extends BaseEntity {
     //관계 설정
 
     @OneToMany(mappedBy = "member", cascade =  CascadeType.REMOVE)
+    @Builder.Default
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member",cascade =  CascadeType.REMOVE)
