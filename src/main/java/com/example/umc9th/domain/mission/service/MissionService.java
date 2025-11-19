@@ -2,7 +2,7 @@ package com.example.umc9th.domain.mission.service;
 
 import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.repository.MemberRepository;
-import com.example.umc9th.domain.mission.dto.MissionResponseDto;
+import com.example.umc9th.domain.mission.dto.response.MissionResponseDto;
 import com.example.umc9th.domain.mission.entity.enums.EStatus;
 import com.example.umc9th.domain.mission.repository.MemberMissionRepository;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@ package com.example.umc9th.domain.mission.repository;
 import com.example.umc9th.domain.mission.entity.enums.EStatus;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.domain.mission.dto.MissionResponseDto;
+import com.example.umc9th.domain.mission.dto.response.MissionResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +15,7 @@ import java.util.List;
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
 
     // 현재 진행 중, 진행 완료한 미션 불러오기
-    @Query("SELECT new com.example.umc9th.domain.mission.dto.MissionResponseDto(" +
+    @Query("SELECT new com.example.umc9th.domain.mission.dto.response.MissionResponseDto(" +
             "mm.id, m.store.name, m.point, m.content, mm.status) " +
             "FROM MemberMission mm " +
             "JOIN mm.mission m JOIN m.store s " +
@@ -27,7 +27,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     );
 
     // 현재 선택된 지역의 도전 가능한 미션 불러오기
-    @Query("SELECT new com.example.umc9th.domain.mission.dto.MissionResponseDto(mm.id, s.name, m.point, m.content, mm.status) " +
+    @Query("SELECT new com.example.umc9th.domain.mission.dto.response.MissionResponseDto(mm.id, s.name, m.point, m.content, mm.status) " +
             "FROM MemberMission mm " +
             "JOIN mm.mission m JOIN m.store s " +
             "WHERE mm.member = :member AND mm.status = :status AND s.region = :selectedRegion")
