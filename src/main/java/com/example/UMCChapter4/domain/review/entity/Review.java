@@ -49,8 +49,6 @@ public class Review extends BaseEntity {
         this.reviewReplyList = reviewReplyList;
     }
 
-    public static Review createReview(String description, float rate, Member member, Store store) {
-        return new Review(description, rate, member, store, null, null);
-    }
+
 
 }

@@ -2,6 +2,7 @@ package com.example.UMCChapter4.domain.member.service;
 
 import com.example.UMCChapter4.domain.member.repository.MemberRepository;
 import com.example.UMCChapter4.domain.mission.dto.LocationMemberMissionDto;
+import com.example.UMCChapter4.domain.mission.enums.EStatus;
 import com.example.UMCChapter4.domain.mission.repository.MemberMissionRepository;
 import com.example.UMCChapter4.domain.store.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class HomeService {
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
 
-    // 지역 내 멤버미션 진행중 목록 (complete == false)
-    public Page<LocationMemberMissionDto> getMyLocationMissions(Long memberId, Long locationId, Boolean complete, Pageable pageable) {
+    // 지역 내 멤버미션 진행중 목록 (status == EStatus.PENDING)
+    public Page<LocationMemberMissionDto> getMyLocationMissions(Long memberId, Long locationId, EStatus status, Pageable pageable) {
         return memberMissionRepository.findMyLocationMissionsInProgress(memberId, locationId, pageable);
     }
 

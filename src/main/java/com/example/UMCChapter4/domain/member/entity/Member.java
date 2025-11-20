@@ -46,9 +46,10 @@ public class Member extends BaseEntity {
     private String detailAddress;
 
     @Column(name = "points", nullable = false) // 0 초기화
-    private Integer points;
+    @Builder.Default
+    private Integer points = 0;
 
-    @Column(name = "email", length = 30, nullable = false)
+    @Column(name = "email", length = 30) //, nullable = false)
     private String email;
 
     @Column(name = "phone_number", length = 13)
@@ -58,15 +59,15 @@ public class Member extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE) // member - food (1:N)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true) // member - food (1:N), 부모-자식 자동삭제
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE) // member - term (1:N)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true) // member - term (1:N)
     private List<MemberTerm> memberTermList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE) // member - mission (1:N)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true) // member - mission (1:N)
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
     @Builder.Default
