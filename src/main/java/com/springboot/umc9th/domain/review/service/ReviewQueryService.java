@@ -50,7 +50,6 @@ public class ReviewQueryService {
         QReview review = QReview.review;
         BooleanBuilder builder = new BooleanBuilder();
 
-        // 필수 조건: 내가 쓴 리뷰만
         builder.and(review.member.id.eq(memberId));
 
         if (type.equals("storeName")) {

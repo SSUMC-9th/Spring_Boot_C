@@ -43,7 +43,8 @@ public class Member extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email",nullable = false)
+//    @Column(name = "email",nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "gender", nullable = false)
@@ -57,6 +58,7 @@ public class Member extends BaseEntity {
     //관계 설정
 
     @OneToMany(mappedBy = "member", cascade =  CascadeType.REMOVE)
+    @Builder.Default
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member",cascade =  CascadeType.REMOVE)
