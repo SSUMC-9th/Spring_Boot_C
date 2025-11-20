@@ -25,6 +25,7 @@ public class MemberConverter {
                 .birthday(dto.birth())
                 .address(dto.address())
                 .gender(dto.gender())
+                .email(dto.email())
                 .build();
     }
 }

@@ -5,6 +5,8 @@ import com.springboot.umc9th.domain.member.dto.res.MemberResDTO;
 import com.springboot.umc9th.domain.member.exception.code.MemberSuccessCode;
 import com.springboot.umc9th.domain.member.service.command.MemberCommandService;
 import com.springboot.umc9th.global.apiPayload.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "회원 API", description = "회원 가입 및 회원 관련 기능")
 public class MemberController {
 
     private final MemberCommandService memberCommandService;
 
     // 회원가입
     @PostMapping("/sign-up")
+    @Operation(summary = "회원가입", description = "신규 회원을 등록")
     public ApiResponse<MemberResDTO.JoinDTO> signUp(
             @RequestBody @Valid MemberReqDTO.JoinDTO dto
     ){

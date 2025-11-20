@@ -27,15 +27,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     @Override
     public ReviewResDTO.CreateReviewResDTO createReview(Long storeId, ReviewReqDTO.CreateReviewDTO dto) {
 
-        // 1) 하드코딩
         Member member = memberRepository.findById(FIXED_MEMBER_ID)
                 .orElseThrow(() -> new RuntimeException("member not found"));
 
-        // 2) 가게 조회
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new RuntimeException("store not found"));
 
-        // 3) 리뷰 생성
         Review review = Review.builder()
                 .member(member)
                 .store(store)
@@ -43,10 +40,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
                 .reviewScore(dto.rating())
                 .build();
 
-        // 4) 저장
         reviewRepository.save(review);
 
-        // 5) Converter 사용한 응답 반환
         return ReviewConverter.toCreateReviewResDTO(review);
     }
 }

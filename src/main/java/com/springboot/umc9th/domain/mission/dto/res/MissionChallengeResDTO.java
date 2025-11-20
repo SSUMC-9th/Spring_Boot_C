@@ -8,7 +8,5 @@ public class MissionChallengeResDTO {
     public record ChallengeResDTO(
             Long memberMissionId,
             Long missionId,
-            Long memberId,
-            Long storeId
-    ){}
+            Long memberId){}
 }

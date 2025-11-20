@@ -43,7 +43,8 @@ public class Member extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email",nullable = false)
+//    @Column(name = "email",nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "gender", nullable = false)

@@ -15,6 +15,7 @@ public class MemberReqDTO {
             LocalDate birth,
             String address,
             String specAddress,
+            String email,
 
             @ExistFoods
             List<Long> preferCategory
