@@ -1,9 +1,10 @@
 package com.example.umc9th.domain.review.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 public class ReviewResponseDTO {
 
@@ -26,6 +27,12 @@ public class ReviewResponseDTO {
         }
 
     }
+
+    @Builder
+    public record createReview(
+            Long reviewId,
+            LocalDateTime createdAt
+    ){}
 
 
 
