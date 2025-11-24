@@ -22,13 +22,12 @@ public class ReviewConverter {
     }
 
     // ReviewRequestDto를 Review 엔티티로 변환
-    public static Review toReview(ReviewRequestDto request, Member member, Store store) {
+    public static Review toReview(Long storeId, ReviewRequestDto.createReview request) {
         return Review.builder()
-                .member(member)
-                .store(store)
-                .content(request.getContent())
-                .ratingScore(request.getRating_score())
-                .photoUrl(request.getImage_url())
+                .content(request.content())
+                .ratingScore(request.rating_score())
+                .store(Store.builder().id(storeId).build())
+                .member(Member.builder().id(request.memberId()).build())
                 .build();
     }
 

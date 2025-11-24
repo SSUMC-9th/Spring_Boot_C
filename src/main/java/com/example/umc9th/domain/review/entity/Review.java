@@ -22,6 +22,7 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 연관관계 설정
     @OneToMany(mappedBy = "review")
     private List<ReviewComment> reviewCommentList = new ArrayList<>();
 
@@ -33,6 +34,7 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    // 컬럼
     @Column(name = "rating_score", nullable = false)
     @Builder.Default
     private Float ratingScore = 0.0f;

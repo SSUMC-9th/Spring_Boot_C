@@ -22,6 +22,7 @@ public class Mission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 연관관계 설정
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
@@ -29,6 +30,7 @@ public class Mission {
     @OneToMany(mappedBy = "mission", cascade = CascadeType.REMOVE)
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
+    //컬럼
     @Column(name = "content", nullable = false)
     private String content;
 

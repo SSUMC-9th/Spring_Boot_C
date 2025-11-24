@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 public class ReviewResponseDto {
 
     @Builder
-    public record createReview(Long reviewId, LocalDateTime createdAt) {
-    }
+    public record createReview(
+            Long reviewId,
+            LocalDateTime createdAt
+    ){}
 }

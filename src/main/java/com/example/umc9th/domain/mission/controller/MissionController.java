@@ -21,7 +21,7 @@ public class MissionController {
 
     private final MissionCommandService missionCommandService;
 
-    @PostMapping
+    @PostMapping("/challenge")
     public ApiResponse<MissionResponseDto.JoinResultDTO> challengeMission(
             @RequestBody @Valid MissionRequestDto request
     ) {

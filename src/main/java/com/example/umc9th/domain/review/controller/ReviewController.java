@@ -18,12 +18,12 @@ import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reviews")
+@RequestMapping("/api")
 public class ReviewController {
 
     private final ReviewQueryService reviewQueryService;
 
-    @GetMapping("/my")
+    @GetMapping("/reviews/my")
     // 반환 타입을 ApiResponse<MyReviewResDto>로 변경
     public ApiResponse<MyReviewResDto> getMyReviews(
             @RequestParam Long memberId,
@@ -38,13 +38,10 @@ public class ReviewController {
     // 리뷰 작성
     private final ReviewCommandService reviewCommandService;
 
-    @PostMapping("/")
-    public ApiResponse<ReviewResponseDto.createReview> createReview(
-            @RequestBody @Valid ReviewRequestDto request
-    ) {
-        Long memberId = 1L; // 아직 DB에 아무 유저도 없기 때문에 임시로 값 작성(유저1)
-        Review review = reviewCommandService.createReview(memberId, request);
+    @PostMapping("/{storeId}/reviews")
+    public ApiResponse<ReviewResponseDto.createReview> createReview(@PathVariable Long storeId, @RequestBody @Valid ReviewRequestDto.createReview requestDTO) {
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, ReviewConverter.toCreateReview(review));
+        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, reviewCommandService.createReview(storeId, requestDTO));
+
     }
 }
