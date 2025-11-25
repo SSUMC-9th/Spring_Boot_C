@@ -78,7 +78,7 @@ public class DataInitializer implements CommandLineRunner {
                     .store(storeA) // 위에 만든 가게 A 객체 연결 (외래키)
                     .point(500L)
                     .content("메뉴 1개 이상 주문 후 리뷰 작성")
-                    .dueDate(LocalDateTime.now().plusDays(7)) // null 혹은 LocalDateTime.now().plusDays(7)
+                    .dueDate(LocalDateTime.now().plusDays(7))
                     .build();
             missionRepository.save(mission1);
 
