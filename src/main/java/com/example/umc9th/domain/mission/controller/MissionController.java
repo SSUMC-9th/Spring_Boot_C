@@ -4,22 +4,24 @@ import com.example.umc9th.domain.mission.converter.MissionConverter;
 import com.example.umc9th.domain.mission.dto.request.MissionRequestDto;
 import com.example.umc9th.domain.mission.dto.response.MissionResponseDto;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc9th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc9th.domain.mission.service.command.MissionCommandService;
+import com.example.umc9th.domain.mission.service.query.MissionQueryService;
+import com.example.umc9th.domain.review.exception.code.ReviewSuccessCode;
+import com.example.umc9th.global.annotation.CheckPage;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/missions")
-public class MissionController {
+public class MissionController implements MissionControllerDocs {
 
     private final MissionCommandService missionCommandService;
+    private final MissionQueryService missionQueryService;
 
     @PostMapping("/challenge")
     public ApiResponse<MissionResponseDto.JoinResultDTO> challengeMission(
@@ -32,5 +34,15 @@ public class MissionController {
 
         return ApiResponse.onSuccess(GeneralSuccessCode.CREATED,
                 MissionConverter.toJoinResultDTO(memberMission));
+    }
+
+    @GetMapping("/store/{storeId}")
+    public ApiResponse<MissionResponseDto.MissionPreViewListDTO> getMissionListByStore(
+            @PathVariable Long storeId,
+            @CheckPage Integer page
+    ){
+        MissionResponseDto.MissionPreViewListDTO missionList = missionQueryService.getMissionListByStore(storeId, page);
+        MissionSuccessCode code = MissionSuccessCode.MISSION_FOUND;
+        return ApiResponse.onSuccess(code, missionList);
     }
 }

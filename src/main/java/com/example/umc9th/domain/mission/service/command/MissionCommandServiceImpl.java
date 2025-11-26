@@ -40,4 +40,5 @@ public class MissionCommandServiceImpl implements MissionCommandService {
         MemberMission memberMission = MissionConverter.toEntity(member, mission);
         return memberMissionRepository.save(memberMission);
     }
+
 }
