@@ -3,10 +3,16 @@ package com.example.UMCChapter4.global.apiPayload.handler;
 import com.example.UMCChapter4.global.apiPayload.ApiResponse;
 import com.example.UMCChapter4.global.apiPayload.code.BaseErrorCode;
 import com.example.UMCChapter4.global.apiPayload.code.GeneralErrorCode;
+import com.example.UMCChapter4.global.apiPayload.code.PageErrorCode;
 import com.example.UMCChapter4.global.apiPayload.exception.GeneralException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GeneralExceptionAdvice {
@@ -36,6 +42,21 @@ public class GeneralExceptionAdvice {
                             code,
                             ex.getMessage()
                     )
+                );
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(
+            ConstraintViolationException ex
+    ) {
+
+        PageErrorCode code = PageErrorCode.INVALID_PAGE_NUMBER;
+
+        return ResponseEntity.status(code.getStatus())
+                .body(ApiResponse.onFailure(
+                                code,
+                                null
+                        )
                 );
     }
 }
