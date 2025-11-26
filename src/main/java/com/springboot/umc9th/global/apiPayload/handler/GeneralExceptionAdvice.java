@@ -5,6 +5,8 @@ import com.springboot.umc9th.global.apiPayload.ApiResponse;
 import com.springboot.umc9th.global.apiPayload.code.BaseErrorCode;
 import com.springboot.umc9th.global.apiPayload.code.GeneralErrorCode;
 import com.springboot.umc9th.global.apiPayload.exception.GeneralException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,6 +26,21 @@ public class GeneralExceptionAdvice {
                                 null
                         )
                 );
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> validation(ConstraintViolationException e) {
+
+        // 예외 메시지 중 첫 번째 메시지(예: "페이지 번호는 1 이상이어야 합니다.")를 가져옴
+        String errorMessage = e.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
+                .findFirst()
+                .orElse("유효하지 않은 파라미터입니다.");
+
+        // PAGE_NOT_VALID 코드를 사용하여 실패 응답 반환
+        // (ErrorStatus.PAGE_NOT_VALID 가 없으면 GeneralErrorCode.BAD_REQUEST 등을 사용해도 됨)
+        return ResponseEntity
+                .status(GeneralErrorCode.PAGE_NOT_VALID.getStatus()) // 400 Bad Request
+                .body(ApiResponse.onFailure(GeneralErrorCode.PAGE_NOT_VALID, errorMessage));
     }
 
     // 그 외의 정의되지 않은 모든 예외 처리
