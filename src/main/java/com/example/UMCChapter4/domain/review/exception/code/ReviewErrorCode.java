@@ -8,8 +8,15 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ReviewErrorCode implements BaseErrorCode {
-    // For test
-    REVIEW_EXCEPTION(HttpStatus.BAD_REQUEST, "REVIEW400_1", "리뷰 예외 발생"),
+
+    BAD_REQUEST(
+            HttpStatus.BAD_REQUEST,
+            "REVIEW400_1",
+            "잘못된 접근입니다."),
+    NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "REVIEW404_1",
+            "리뷰를 찾지 못했습니다."),
     ;
 
     private final HttpStatus status;

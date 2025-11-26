@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum StoreSuccessCode implements BaseSuccessCode {
 
-    FOUND(HttpStatus.OK,
+    OK(HttpStatus.OK,
             "STORE200_1",
+            "성공적으로 요청을 처리했습니다"),
+    FOUND(HttpStatus.FOUND,
+            "STORE302_1",
             "성공적으로 매장을 조회했습니다."),
     CREATED(HttpStatus.CREATED,
             "STORE201_1",

@@ -12,6 +12,7 @@ import com.example.UMCChapter4.domain.store.repository.LocationRepository;
 import com.example.UMCChapter4.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -21,17 +22,17 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final LocationRepository locationRepository;
     private final StoreRepository storeRepository;
 
-    @Override
+    @Transactional
     public StoreResDTO.StoreCreateDTO createStore(StoreReqDTO.StoreCreateDTO ReqDTO) {
 
         Location location = locationRepository.findById(ReqDTO.locationId())
                 .orElseThrow(() -> new LocationException(LocationErrorCode.NOT_FOUND));
 
         Store store = StoreConverter.toStore(ReqDTO, location);
+
         storeRepository.save(StoreConverter.toStore(ReqDTO, location));
+        location.getStoreList().add(store);
 
-        StoreResDTO.StoreCreateDTO ResDTO = StoreConverter.toCreateResDTO(store);
-
-        return ResDTO;
+        return StoreConverter.toCreateResDTO(store);
     }
 }

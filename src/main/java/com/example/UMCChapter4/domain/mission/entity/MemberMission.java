@@ -28,4 +28,9 @@ public class MemberMission {
     @JoinColumn(name = "mission_id", foreignKey = @ForeignKey(name = "fk_mission_member_id"))
     private Mission mission;
 
+    // 상태 변경 메서드
+    public MemberMission setStatus(EStatus status) {
+        this.status = status;
+        return this;
+    }
 }

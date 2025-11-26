@@ -7,7 +7,7 @@ public class ReviewReqDTO {
     @Builder
     public record ReviewWriteDTO(
             Long storeId,
-            Float rate,            // 1~5
+            String rate,            // 1~5
             String description
     ) {}
 

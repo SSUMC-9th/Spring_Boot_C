@@ -24,5 +24,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 내 포인트 보기
     @Query("select m.points from Member m where m.id = :memberId")
     Integer findPointsByUserId(@Param("memberId") Long memberId);
+
+    Optional<Member> findByName(@Param("memberName") String memberName);
 }
 

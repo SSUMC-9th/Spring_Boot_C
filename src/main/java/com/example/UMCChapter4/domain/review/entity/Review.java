@@ -5,7 +5,9 @@ import com.example.UMCChapter4.domain.store.entity.Store;
 import com.example.UMCChapter4.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Review extends BaseEntity {
     private String description;
 
     @Column(name = "rate", nullable = false)
-    private Float rate;
+    private BigDecimal rate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // review - member (N:1)
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "fk_review_member_id"), nullable = false)
@@ -38,16 +40,9 @@ public class Review extends BaseEntity {
     private List<ReviewPhoto> reviewPhotoList;
 
     @OneToMany(mappedBy = "review") // review - review_reply (1:N)
+    @BatchSize(size = 10)
     private List<ReviewReply> reviewReplyList;
 
-    private Review(String description, float rate, Member member, Store store, List<ReviewPhoto> reviewPhotoList, List<ReviewReply> reviewReplyList) {
-        this.description = description;
-        this.rate = rate;
-        this.member = member;
-        this.store = store;
-        this.reviewPhotoList = reviewPhotoList;
-        this.reviewReplyList = reviewReplyList;
-    }
 
 
 

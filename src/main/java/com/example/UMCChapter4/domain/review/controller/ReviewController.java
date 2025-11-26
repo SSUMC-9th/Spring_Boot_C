@@ -2,22 +2,23 @@ package com.example.UMCChapter4.domain.review.controller;
 
 import com.example.UMCChapter4.domain.review.dto.ReviewReqDTO;
 import com.example.UMCChapter4.domain.review.dto.ReviewResDTO;
-import com.example.UMCChapter4.domain.review.entity.Review;
 import com.example.UMCChapter4.domain.review.exception.code.ReviewSuccessCode;
 import com.example.UMCChapter4.domain.review.service.command.ReviewCommandService;
 import com.example.UMCChapter4.domain.review.service.query.ReviewQueryService;
+import com.example.UMCChapter4.global.annotation.ValidPage;
 import com.example.UMCChapter4.global.apiPayload.ApiResponse;
-import com.example.UMCChapter4.global.apiPayload.code.GeneralSuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "리뷰 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/reviews")
-public class ReviewController {
+public class ReviewController implements ReviewControllerDocs {
     public final ReviewQueryService reviewQueryService;
     public final ReviewCommandService reviewCommandService;
 
@@ -27,52 +28,32 @@ public class ReviewController {
             @RequestParam String type
     ) {
         // 검색 및 예외 처리
-        List<Review> reviewList = reviewQueryService.searchReview(query, type);
-
-        // Convert
-        List<ReviewResDTO.ReviewSearchDTO> result = new ArrayList<>();
-        for (Review review : reviewList) {
-            result.add(ReviewResDTO.ReviewSearchDTO.builder()
-                    .searchDescription(review.getDescription())
-                    .searchRate(review.getRate())
-//                    .searchReviewPhotoList(review.getReviewPhotoList())
-//                    .searchReviewReplyList(review.getReviewReplyList())
-                    .build());
-        }
+        List<ReviewResDTO.ReviewSearchDTO> ResDTO = reviewQueryService.searchReview(query, type);
 
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.FOUND,
-                result
+                ResDTO
         );
     }
 
     @GetMapping("/my/search")
-    public ApiResponse<List<ReviewResDTO.ReviewSearchDTO>> searchMemberReview(
+    public ApiResponse<List<ReviewResDTO.ReviewSearchMyDTO>> searchMemberReview(
             @RequestParam String query,
             @RequestParam String type,
             @RequestParam Long memberId
     ) {
         // 검색 및 예외 처리
-        List<Review> reviewList = reviewQueryService.searchMyReview(query, type, memberId);
-
-        // Convert
-        List<ReviewResDTO.ReviewSearchDTO> result = new ArrayList<>();
-        for (Review review : reviewList) {
-            result.add(ReviewResDTO.ReviewSearchDTO.builder()
-                    .searchDescription(review.getDescription())
-                    .searchRate(review.getRate())
-                    .build());
-        }
+        List<ReviewResDTO.ReviewSearchMyDTO> ResDTO = reviewQueryService.searchMyReview(query, type, memberId);
 
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.FOUND,
-                result
+                ResDTO
         );
     }
 
     @PostMapping("/write")
     public ApiResponse<ReviewResDTO.ReviewWriteDTO> writeReview(
-            @RequestBody ReviewReqDTO.ReviewWriteDTO ReqDTO // storeId, description, rate
+            @RequestBody ReviewReqDTO.ReviewWriteDTO ReqDTO // storeName, description, rate
     ){
 
         ReviewResDTO.ReviewWriteDTO ResDTO = reviewCommandService.writeReview(ReqDTO);
@@ -80,6 +61,30 @@ public class ReviewController {
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.CREATED, // review 생성
                 ResDTO
+        );
+    }
+
+    // 가게의 리뷰 목록 조회
+    @GetMapping("/store/get")
+    public ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
+            @RequestParam String storeName,
+            @RequestParam(defaultValue = "1") @ValidPage Integer pageNumber
+    ){
+
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.FOUND,
+                reviewQueryService.getReviews(storeName, pageNumber-1)
+        );
+    }
+
+    @GetMapping("/member/get")
+    public ApiResponse<ReviewResDTO.ReviewMyPreviewListDTO> getMyReviews(
+        @RequestParam String memberName,
+        @RequestParam(defaultValue = "1") @ValidPage Integer pageNumber // 1이상
+    ){
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.FOUND,
+                reviewQueryService.getMyReviews(memberName, pageNumber)
         );
     }
 }

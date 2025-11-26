@@ -1,16 +1,19 @@
 package com.example.UMCChapter4.domain.mission.repository;
 
+import com.example.UMCChapter4.domain.member.entity.Member;
 import com.example.UMCChapter4.domain.mission.dto.MyMissionStatusDto;
 import com.example.UMCChapter4.domain.mission.dto.LocationMemberMissionDto;
 import com.example.UMCChapter4.domain.mission.entity.MemberMission;
 import com.example.UMCChapter4.domain.mission.enums.EStatus;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
     // 진행 중 or 진행완료 멤버미션 목록
@@ -69,4 +72,14 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     );
 
 
+    @Query(value = "SELECT mm FROM MemberMission mm " +
+            "JOIN FETCH mm.mission m " +
+            "JOIN FETCH m.store s " +
+            "WHERE mm.member = :member AND mm.status = :eStatus",
+            countQuery = "SELECT COUNT(mm) FROM MemberMission mm WHERE mm.member = :member AND mm.status = :eStatus")
+    Page<MemberMission> findAllByMemberAndStatus(
+            @Param("member") Member member,
+            @Param("eStatus") EStatus eStatus,
+            Pageable pageable
+    );
 }

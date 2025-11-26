@@ -4,7 +4,13 @@ import lombok.Builder;
 
 public class MemberMissionReqDTO {
     @Builder
-    public record MemberMissionInProgressDTO(
+    public record MemberMissionCreateDTO(
+            Long memberId,
             Long missionId
+    ){}
+
+    @Builder
+    public record MemberMissionCompleteDTO(
+            Long memberMissionId
     ){}
 }
