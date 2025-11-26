@@ -10,6 +10,9 @@ public enum GeneralErrorCode implements BaseErrorCode{
     BAD_REQUEST(HttpStatus.BAD_REQUEST,
             "COMMON400_1",
             "잘못된 요청입니다."),
+    PAGE_NUMBER_INVALID(HttpStatus.BAD_REQUEST, // 페이지 오류 코드
+            "COMMON400_2",
+            "페이지 번호는 1 이상이어야 합니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,
             "AUTH401_1",
             "인증이 필요합니다."),
@@ -22,6 +25,7 @@ public enum GeneralErrorCode implements BaseErrorCode{
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,
             "COMMON500_1",
             "예기치 않은 서버 에러가 발생했습니다."),
+
     ;
 
     private final HttpStatus status;

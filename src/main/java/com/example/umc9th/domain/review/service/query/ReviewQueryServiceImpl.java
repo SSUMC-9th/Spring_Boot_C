@@ -1,5 +1,9 @@
 package com.example.umc9th.domain.review.service.query;
 
+import com.example.umc9th.domain.member.entity.Member;
+import com.example.umc9th.domain.member.exception.MemberException;
+import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
+import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.converter.ReviewConverter;
 import com.example.umc9th.domain.review.dto.MyReviewDto;
 import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
@@ -13,6 +17,7 @@ import com.example.umc9th.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewQueryServiceImpl implements ReviewQueryService {
 
+    private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
 
@@ -53,4 +59,23 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewConverter.toReviewPreviewListDTO(result);
     }
 
+    // 나의 리뷰 조회 API(페이징)
+    @Override
+    public ReviewResponseDto.ReviewPreViewListDTO getMyReviewList(
+            Long memberId,
+            Integer page
+    ) {
+
+        // 멤버를 가져온다 (멤버 존재 여부 검증)
+        Member member = memberRepository.findById(memberId)
+                // 없으면 예외 터뜨린다
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        // 사용자가 쓴 리뷰를 조회하여 가져온다 (pageSize = 10으로 고정)
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Review> reviewPage = reviewRepository.findAllByMemberId(memberId, pageRequest);
+
+        // 결과를 응답 DTO로 변환한다 (Converter 이용)
+        return ReviewConverter.toReviewPreviewListDTO(reviewPage);
+    }
 }

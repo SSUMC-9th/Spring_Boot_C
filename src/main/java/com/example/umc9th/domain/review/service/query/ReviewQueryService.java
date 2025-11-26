@@ -20,4 +20,10 @@ public interface ReviewQueryService {
         String storeName,
         Integer page
     );
+
+    // 나의 리뷰 조회 API (페이징)
+    ReviewResponseDto.ReviewPreViewListDTO getMyReviewList(
+            Long MemberId,
+            Integer page
+    );
 }

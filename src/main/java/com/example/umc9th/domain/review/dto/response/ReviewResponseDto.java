@@ -17,7 +17,7 @@ public class ReviewResponseDto {
             LocalDateTime createdAt
     ){}
 
-    // 가게 리뷰 조회 목록 DTO
+    // 리뷰 조회 목록 DTO
     @Builder
     public record ReviewPreViewListDTO(
             List<ReviewPreViewDTO> reviewList,
@@ -28,7 +28,7 @@ public class ReviewResponseDto {
             Boolean isLast
     ){}
 
-    // 가게 리뷰 조회 DTO
+    // 리뷰 조회 DTO
     @Builder
     public record ReviewPreViewDTO(
             String ownerNickname,

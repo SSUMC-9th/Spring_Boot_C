@@ -14,4 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
 
     // 여러개의 리뷰를 모두 가져오므로 Page<Review>로 반환 (페이지네이션)
     Page<Review> findAllByStore(Store store, Pageable pageable);
+
+    Page<Review> findAllByMemberId(Long memberId, Pageable pageable);
 }
