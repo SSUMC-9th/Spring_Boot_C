@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,6 +37,7 @@ public class MissionResponseDto {
     @Builder
     public record MissionPreViewDTO(
             Long missionId,
+            String storeName,
             Long point,
             LocalDateTime dueDate,
             String content,

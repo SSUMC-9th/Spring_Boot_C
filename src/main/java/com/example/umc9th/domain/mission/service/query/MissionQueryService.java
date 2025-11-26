@@ -10,4 +10,6 @@ public interface MissionQueryService {
             Long storeId,
             Integer page
     );
+
+    MissionResponseDto.MissionPreViewListDTO getMyMissionList(Long memberId, Integer page);
 }

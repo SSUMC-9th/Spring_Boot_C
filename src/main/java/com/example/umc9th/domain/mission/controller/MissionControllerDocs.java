@@ -15,5 +15,12 @@ public interface MissionControllerDocs {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공적으로 조회되었습니다."),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
-    })public ApiResponse<MissionResponseDto.MissionPreViewListDTO> getMissionListByStore(Long storeId, Integer page);
+    }) ApiResponse<MissionResponseDto.MissionPreViewListDTO> getMissionListByStore(Long storeId, Integer page);
+
+    // 내가 도전 중인 미션 목록 조회 API
+    @Operation(summary = "내가 도전 중인 미션 목록 조회 API By 제스퍼 (개발 중)", description = "내가 도전 중(IN_PROGRESS)인 미션 목록을 조회합니다. 페이징을 포함합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공적으로 조회되었습니다."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    }) ApiResponse<MissionResponseDto.MissionPreViewListDTO> getMyChallengingMissions(String authorizationHeader, Integer page);
 }

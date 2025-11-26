@@ -1,22 +1,17 @@
 package com.example.umc9th.domain.review.controller;
 
-import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.domain.review.converter.ReviewConverter;
 import com.example.umc9th.domain.review.dto.request.ReviewRequestDto;
 import com.example.umc9th.domain.review.dto.response.ReviewResponseDto;
-import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc9th.domain.review.service.command.ReviewCommandService;
 import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.annotation.CheckPage;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
+
 
 
 
@@ -50,6 +45,7 @@ public class ReviewController implements ReviewControllerDocs {
 
     // 가게의 리뷰 목록 조회
     @GetMapping("/reviews")
+    @Override
     public ApiResponse<ReviewResponseDto.ReviewPreViewListDTO> getReviews(
             @RequestParam String storeName,
             @RequestParam(defaultValue = "1") Integer Page
@@ -61,6 +57,7 @@ public class ReviewController implements ReviewControllerDocs {
 
     // 나의 리뷰 목록 조회
     @GetMapping("/reviews/my")
+    @Override
     public ApiResponse<ReviewResponseDto.ReviewPreViewListDTO> getMyReviewList(
             // 사용자 인증 후 request Header에서 가져와야 하지만, 로그인 구현이 아직 안되었으므로 임시로 memberId = 1로 고정
             @RequestHeader(name = "Authorization", required = false) String authorizationHeader,

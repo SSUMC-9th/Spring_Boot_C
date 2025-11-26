@@ -39,5 +39,21 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
             Pageable pageable
     );
 
+    // 내가 진행중인 미션 목록 조회
+    @Query(value = "SELECT mm " +
+            "FROM MemberMission mm " +
+            "JOIN FETCH mm.mission m " +
+            "JOIN FETCH m.store s " +
+            "WHERE mm.member = :member AND mm.status = :status",
+
+            // Count 쿼리에는 Fetch Join이 필요 없으므로 성능 최적화를 위해 따로 작성.
+            countQuery = "SELECT COUNT(mm) " +
+                    "FROM MemberMission mm " +
+                    "WHERE mm.member = :member AND mm.status = :status")
+    Page<MemberMission> findAllByMemberAndStatus(
+            @Param("member") Member member,
+            @Param("status") EStatus status,
+            Pageable pageable
+    );
 
 }
