@@ -4,6 +4,7 @@ import com.example.umc9th.domain.review.converter.ReviewConverter;
 import com.example.umc9th.domain.review.dto.request.ReviewRequestDTO;
 import com.example.umc9th.domain.review.dto.response.ReviewResponseDTO;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc9th.domain.review.service.command.ReviewCommandService;
 import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.annotation.ExistStore;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
-public class ReviewController {
+public class ReviewController implements ReviewControllerDocs{
     private final ReviewQueryService reviewQueryService;
     private final ReviewCommandService reviewCommandService;
 
@@ -30,7 +31,7 @@ public class ReviewController {
     @GetMapping("/review/search")
     public ApiResponse<List<Review>> searchReview(@RequestParam String query,  // 안암동
                                     @RequestParam String type // region
-    ) {
+    ) throws Exception {
         // service 에게 요청
         List<Review> result = reviewQueryService.searchReview(query, type);
         // 응답 코드 정의
@@ -59,6 +60,17 @@ public class ReviewController {
     public ApiResponse<ReviewResponseDTO.createReview> createReview(@PathVariable @ExistStore Long storeId, @RequestBody @Valid ReviewRequestDTO.createReview requestDTO) {
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviewCommandService.createReview(storeId, requestDTO));
 
+    }
+
+    // 가게의 리뷰 목록 조회
+    @GetMapping("/reviews")
+    @Override
+    public ApiResponse<ReviewResponseDTO.ReviewPreViewListDTO> getReviews(
+            @RequestParam String storeName,
+            @RequestParam(defaultValue = "1") Integer page
+    ){
+        ReviewSuccessCode code = ReviewSuccessCode.FOUND;
+        return ApiResponse.onSuccess(code, reviewQueryService.findReview(storeName, page));
     }
 
 }

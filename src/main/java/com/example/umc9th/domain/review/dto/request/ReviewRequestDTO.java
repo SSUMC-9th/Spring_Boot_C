@@ -10,7 +10,7 @@ public class ReviewRequestDTO {
             @NotBlank(message = "내용은 필수입니다.")
             String content,
             @NotNull(message = "별점은 필수입니다.")
-            Double star,
+            float star,
             Long memberId
     ){}
 }
