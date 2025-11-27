@@ -1,50 +1,74 @@
 package com.example.umc9th.domain.review.controller;
 
-import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.domain.review.converter.ReviewConverter;
 import com.example.umc9th.domain.review.dto.request.ReviewRequestDto;
 import com.example.umc9th.domain.review.dto.response.ReviewResponseDto;
-import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc9th.domain.review.service.command.ReviewCommandService;
 import com.example.umc9th.domain.review.service.query.ReviewQueryService;
+import com.example.umc9th.global.annotation.CheckPage;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
+
 
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reviews")
-public class ReviewController {
+@RequestMapping("/api")
+public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewQueryService reviewQueryService;
 
-    @GetMapping("/my")
-    // 반환 타입을 ApiResponse<MyReviewResDto>로 변경
-    public ApiResponse<MyReviewResDto> getMyReviews(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) String storeName,
-            @RequestParam(required = false) Float score
-    ) {
-        MyReviewResDto responseDto = reviewQueryService.checkMyReview(memberId, storeName, score);
-
-        return ApiResponse.onSuccess(GeneralSuccessCode.OK, responseDto);
-    }
+//    @GetMapping("/reviews/my")
+//    // 반환 타입을 ApiResponse<MyReviewResDto>로 변경
+//    public ApiResponse<MyReviewResDto> getMyReviews(
+//            @RequestParam Long memberId,
+//            @RequestParam(required = false) String storeName,
+//            @RequestParam(required = false) Float score
+//    ) {
+//        MyReviewResDto responseDto = reviewQueryService.checkMyReview(memberId, storeName, score);
+//
+//        return ApiResponse.onSuccess(GeneralSuccessCode.OK, responseDto);
+//    }
 
     // 리뷰 작성
     private final ReviewCommandService reviewCommandService;
 
-    @PostMapping("/")
-    public ApiResponse<ReviewResponseDto.createReview> createReview(
-            @RequestBody @Valid ReviewRequestDto request
-    ) {
-        Long memberId = 1L; // 아직 DB에 아무 유저도 없기 때문에 임시로 값 작성(유저1)
-        Review review = reviewCommandService.createReview(memberId, request);
+    @PostMapping("/{storeId}/reviews")
+    public ApiResponse<ReviewResponseDto.createReview> createReview(@PathVariable Long storeId, @RequestBody @Valid ReviewRequestDto.createReview requestDTO) {
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, ReviewConverter.toCreateReview(review));
+        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, reviewCommandService.createReview(storeId, requestDTO));
+    }
+
+    // 가게의 리뷰 목록 조회
+    @GetMapping("/reviews")
+    @Override
+    public ApiResponse<ReviewResponseDto.ReviewPreViewListDTO> getReviews(
+            @RequestParam String storeName,
+            @RequestParam(defaultValue = "1") Integer Page
+    ){
+
+        ReviewSuccessCode code = ReviewSuccessCode.REVIEW_FOUND;
+        return ApiResponse.onSuccess(code, reviewQueryService.findReview(storeName, Page));
+    }
+
+    // 나의 리뷰 목록 조회
+    @GetMapping("/reviews/my")
+    @Override
+    public ApiResponse<ReviewResponseDto.ReviewPreViewListDTO> getMyReviewList(
+            // 사용자 인증 후 request Header에서 가져와야 하지만, 로그인 구현이 아직 안되었으므로 임시로 memberId = 1로 고정
+            @RequestHeader(name = "Authorization", required = false) String authorizationHeader,
+            @CheckPage Integer page
+    ) {
+        Long memberId = 1L;
+
+        ReviewResponseDto.ReviewPreViewListDTO reviewList =
+                reviewQueryService.getMyReviewList(memberId, page);
+
+        ReviewSuccessCode code = ReviewSuccessCode.REVIEW_FOUND;
+        return ApiResponse.onSuccess(code, reviewList);
     }
 }

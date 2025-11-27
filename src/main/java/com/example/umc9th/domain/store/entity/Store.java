@@ -23,6 +23,7 @@ public class Store extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 연관관계 설정
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
@@ -34,6 +35,7 @@ public class Store extends BaseEntity{
     @JoinColumn(name = "region_id")
     private Region region;
 
+    // 컬럼
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 

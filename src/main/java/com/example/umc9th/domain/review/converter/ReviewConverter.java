@@ -7,7 +7,9 @@ import com.example.umc9th.domain.review.dto.response.MyReviewResDto;
 import com.example.umc9th.domain.review.dto.response.ReviewResponseDto;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,13 +24,12 @@ public class ReviewConverter {
     }
 
     // ReviewRequestDto를 Review 엔티티로 변환
-    public static Review toReview(ReviewRequestDto request, Member member, Store store) {
+    public static Review toReview(Long storeId, ReviewRequestDto.createReview request) {
         return Review.builder()
-                .member(member)
-                .store(store)
-                .content(request.getContent())
-                .ratingScore(request.getRating_score())
-                .photoUrl(request.getImage_url())
+                .content(request.content())
+                .ratingScore(request.rating_score())
+                .store(Store.builder().id(storeId).build())
+                .member(Member.builder().id(request.memberId()).build())
                 .build();
     }
 
@@ -38,5 +39,35 @@ public class ReviewConverter {
                 review.getId(),
                 review.getCreatedAt()
         );
+    }
+
+    // 가게 리뷰 조회
+    //  result -> DTO
+    public static ReviewResponseDto.ReviewPreViewListDTO toReviewPreviewListDTO(
+            Page<Review> result
+    ){
+        return ReviewResponseDto.ReviewPreViewListDTO.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewPreviewDTO)
+                        .toList()
+                )
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    // review 객체 -> ReviewPreViewDTO로 변환
+    public static ReviewResponseDto.ReviewPreViewDTO toReviewPreviewDTO(
+            Review review
+    ){
+        return ReviewResponseDto.ReviewPreViewDTO.builder()
+                .ownerNickname(review.getMember().getName())
+                .score(review.getRatingScore())
+                .body(review.getContent())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
+                .build();
     }
 }
