@@ -41,6 +41,9 @@ public class MemberMissionCommandServiceImpl implements MemberMissionCommandServ
         Member member = memberRepository.findById(ReqDTO.memberId()) // memberId=1 로 하드코딩
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
+        if (memberMissionRepository.findByMemberAndMission(member, mission).isPresent()) // 이미 진행중인 미션인지
+            throw new MemberMissionException(MemberMissionErrorCode.DUPLICATED);
+
 
         MemberMission memberMission =
                 MemberMissionConverter.toMemberMission(ReqDTO, mission, member);

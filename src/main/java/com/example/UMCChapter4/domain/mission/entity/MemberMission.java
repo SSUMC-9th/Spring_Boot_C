@@ -2,6 +2,7 @@ package com.example.UMCChapter4.domain.mission.entity;
 
 import com.example.UMCChapter4.domain.member.entity.Member;
 import com.example.UMCChapter4.domain.mission.enums.EStatus;
+import com.example.UMCChapter4.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name = "member_mission")
-public class MemberMission {
+public class MemberMission extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

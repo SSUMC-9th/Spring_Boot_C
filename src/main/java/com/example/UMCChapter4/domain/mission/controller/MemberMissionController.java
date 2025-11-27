@@ -9,9 +9,11 @@ import com.example.UMCChapter4.global.annotation.ValidPage;
 import com.example.UMCChapter4.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "멤버-미션")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member-missions")

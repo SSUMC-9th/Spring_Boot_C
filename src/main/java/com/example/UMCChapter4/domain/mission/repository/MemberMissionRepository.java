@@ -4,6 +4,7 @@ import com.example.UMCChapter4.domain.member.entity.Member;
 import com.example.UMCChapter4.domain.mission.dto.MyMissionStatusDto;
 import com.example.UMCChapter4.domain.mission.dto.LocationMemberMissionDto;
 import com.example.UMCChapter4.domain.mission.entity.MemberMission;
+import com.example.UMCChapter4.domain.mission.entity.Mission;
 import com.example.UMCChapter4.domain.mission.enums.EStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,4 +83,6 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
             @Param("eStatus") EStatus eStatus,
             Pageable pageable
     );
+
+    Optional<MemberMission> findByMemberAndMission(Member member, Mission mission);
 }
