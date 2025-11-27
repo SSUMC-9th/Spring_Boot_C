@@ -7,7 +7,9 @@ import com.example.UMCChapter4.domain.store.dto.StoreResDTO;
 import com.example.UMCChapter4.domain.store.entity.Location;
 import com.example.UMCChapter4.domain.store.entity.Store;
 import com.example.UMCChapter4.domain.store.exception.LocationException;
+import com.example.UMCChapter4.domain.store.exception.StoreException;
 import com.example.UMCChapter4.domain.store.exception.code.LocationErrorCode;
+import com.example.UMCChapter4.domain.store.exception.code.StoreErrorCode;
 import com.example.UMCChapter4.domain.store.repository.LocationRepository;
 import com.example.UMCChapter4.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,9 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
     @Transactional
     public StoreResDTO.StoreCreateDTO createStore(StoreReqDTO.StoreCreateDTO ReqDTO) {
+
+        if (storeRepository.findByName(ReqDTO.name()).isPresent())
+            throw new StoreException(StoreErrorCode.DUPLICATED);
 
         Location location = locationRepository.findById(ReqDTO.locationId())
                 .orElseThrow(() -> new LocationException(LocationErrorCode.NOT_FOUND));

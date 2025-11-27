@@ -10,11 +10,13 @@ import com.example.UMCChapter4.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "리뷰 API")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/reviews")
@@ -77,6 +79,7 @@ public class ReviewController implements ReviewControllerDocs {
         );
     }
 
+    // 내가 작성한 리뷰 목록 조회
     @GetMapping("/member/get")
     public ApiResponse<ReviewResDTO.ReviewMyPreviewListDTO> getMyReviews(
         @RequestParam String memberName,
@@ -84,7 +87,7 @@ public class ReviewController implements ReviewControllerDocs {
     ){
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.FOUND,
-                reviewQueryService.getMyReviews(memberName, pageNumber)
+                reviewQueryService.getMyReviews(memberName, pageNumber-1)
         );
     }
 }

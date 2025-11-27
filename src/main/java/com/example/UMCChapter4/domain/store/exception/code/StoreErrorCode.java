@@ -12,6 +12,9 @@ public enum StoreErrorCode implements BaseErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND,
             "STORE404_1",
             "해당 가게를 찾지 못했습니다."),
+    DUPLICATED(HttpStatus.BAD_REQUEST,
+            "STORE400_1",
+            "중복된 가게 이름입니다.")
     ;
 
     private final HttpStatus status;
