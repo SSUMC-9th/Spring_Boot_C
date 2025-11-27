@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.mission.repository;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.mission.dto.response.HomeResponseDTO;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.review.entity.Review;
@@ -28,4 +29,6 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     // 가게에 맞는 미션 가져오기
     Page<Mission> findAllByStore(Store store, PageRequest pageRequest);
+
+
 }

@@ -10,8 +10,11 @@ import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.annotation.ExistStore;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,5 +75,15 @@ public class ReviewController implements ReviewControllerDocs{
         ReviewSuccessCode code = ReviewSuccessCode.FOUND;
         return ApiResponse.onSuccess(code, reviewQueryService.findReview(storeName, page));
     }
+
+    // 내가 작성한 리뷰 목록
+    @Override
+    public ApiResponse<ReviewResponseDTO.ReviewPreViewListDTO> getMyReviewList(
+            @RequestParam Long memberId,
+            @RequestParam(defaultValue = "1") Integer page
+    ) {
+        return ApiResponse.onSuccess(ReviewSuccessCode.FOUND, reviewQueryService.findMyReview(memberId,page));
+    }
+
 
 }

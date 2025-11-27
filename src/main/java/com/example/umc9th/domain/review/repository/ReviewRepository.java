@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.review.repository;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.store.entity.Store;
 import com.querydsl.core.types.Predicate;
@@ -16,4 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
 
     // 가게에 맞는 리뷰 가져오기
     Page<Review> findAllByStore(Store store, PageRequest pageRequest);
+
+    // 내가 작성한 리뷰 가져오기
+    Page<Review> findAllByMember(Member member, PageRequest pageRequest);
 }

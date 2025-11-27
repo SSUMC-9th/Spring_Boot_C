@@ -21,4 +21,19 @@ public interface ReviewControllerDocs {
             @RequestParam String storeName,
             @RequestParam Integer page
     );
+
+
+    @Operation(
+            summary = "내가 작성한 리뷰 목록 조회 API By 요시 (개발 중)",
+            description = "내가 작성한 리뷰 목록을 가져옵니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    @GetMapping("/reviews/my")
+    ApiResponse<ReviewResponseDTO.ReviewPreViewListDTO> getMyReviewList(
+            @RequestParam Long memberId,
+            @RequestParam(defaultValue = "1") Integer page
+    );
 }

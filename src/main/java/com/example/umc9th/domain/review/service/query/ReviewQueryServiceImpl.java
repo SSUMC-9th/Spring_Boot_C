@@ -1,6 +1,8 @@
 package com.example.umc9th.domain.review.service.query;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.entity.QMember;
+import com.example.umc9th.domain.member.exception.MemberException;
 import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.converter.ReviewConverter;
@@ -144,6 +146,19 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         Page<Review> result = reviewRepository.findAllByStore(store, pageRequest);
 
         System.out.println("result: " + result);
+        // 결과를 응답 DTO로 변환
+        return ReviewConverter.toReviewPreViewListDTO(result);
+    }
+
+    @Override
+    public ReviewResponseDTO.ReviewPreViewListDTO findMyReview(Long memberId, Integer page){
+        // 사용자 가져오기
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        // 가게에 맞는 리뷰를 가져옴 (Offset 페이징)
+        PageRequest pageRequest = PageRequest.of(page, 5);
+        Page<Review> result = reviewRepository.findAllByMember(member, pageRequest);
+
         // 결과를 응답 DTO로 변환
         return ReviewConverter.toReviewPreViewListDTO(result);
     }

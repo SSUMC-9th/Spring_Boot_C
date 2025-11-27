@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.mission.controller;
 
 import com.example.umc9th.domain.mission.dto.request.MissionRequestDTO;
+import com.example.umc9th.domain.mission.dto.response.MemberMissionResponseDTO;
 import com.example.umc9th.domain.mission.dto.response.MissionResponseDTO;
 import com.example.umc9th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc9th.domain.mission.service.command.MissionCommandService;
@@ -33,13 +34,45 @@ public class MissionController implements MissionControllerDocs{
 
     }
 
+
+
     // 가게의 미션 목록
     @Override
-    @PostMapping("/missions")
+    @GetMapping("/missions")
     public ApiResponse<MissionResponseDTO.MissionPreViewListDTO> findMission(
             @RequestParam String storeName,
             @RequestParam Integer page
     ){
         return ApiResponse.onSuccess(MissionSuccessCode.FOUND, missionQueryService.findMission(storeName, page));
     }
+
+    // 내가 진행중인 미션 목록
+    @Override
+    @GetMapping("/missions/my/in-progress")
+    public ApiResponse<MemberMissionResponseDTO.MemberMissionPreViewListDTO> findMyMissionInProgress(
+            @RequestParam(defaultValue = "1") Integer page
+    ){
+        return ApiResponse.onSuccess(MissionSuccessCode.FOUND, missionQueryService.findMyMission(false, page));
+    }
+
+    // 내가 진행중인 미션 목록
+    @GetMapping("/missions/my/completed")
+    @Override
+    public ApiResponse<MemberMissionResponseDTO.MemberMissionPreViewListDTO> findMyMissionCompleted(
+            @RequestParam(defaultValue = "1") Integer page
+    ){
+        return ApiResponse.onSuccess(MissionSuccessCode.FOUND, missionQueryService.findMyMission(true, page));
+    }
+
+    // 진행중인 미션 진행 완료로 바꾸기 (변경하고, 변경된 상태의 미션을 조회까지 해야 함)
+    @PostMapping("/missions/complete")
+    @Override
+    public ApiResponse<MemberMissionResponseDTO.MemberMissionPreViewDTO> completeMission(
+            @RequestParam Long missionId) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                missionCommandService.completeMission(missionId)
+        );
+    }
+
 }

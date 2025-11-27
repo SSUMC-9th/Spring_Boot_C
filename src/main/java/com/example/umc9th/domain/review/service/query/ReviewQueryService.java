@@ -15,4 +15,6 @@ public interface ReviewQueryService {
     public BooleanExpression ratingBetween(QReview review, Double ratingRange);
 
     public ReviewResponseDTO.ReviewPreViewListDTO findReview(String storeName, Integer page);
+    public ReviewResponseDTO.ReviewPreViewListDTO findMyReview(Long memberId, Integer page);
+
 }
