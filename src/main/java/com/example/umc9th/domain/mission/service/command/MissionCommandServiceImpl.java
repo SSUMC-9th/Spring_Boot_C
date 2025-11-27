@@ -3,8 +3,10 @@ package com.example.umc9th.domain.mission.service.command;
 import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.member.repository.MemberRepository;
+import com.example.umc9th.domain.mission.converter.MemberMissionConverter;
 import com.example.umc9th.domain.mission.converter.MissionConverter;
 import com.example.umc9th.domain.mission.dto.request.MissionRequestDTO;
+import com.example.umc9th.domain.mission.dto.response.MemberMissionResponseDTO;
 import com.example.umc9th.domain.mission.dto.response.MissionResponseDTO;
 import com.example.umc9th.domain.mission.dto.response.MyMissionResponseDTO;
 import com.example.umc9th.domain.mission.entity.Mission;
@@ -16,6 +18,8 @@ import com.example.umc9th.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +57,23 @@ public class MissionCommandServiceImpl implements MissionCommandService {
 
         memberMissionRepository.save(memberMission);
         return MissionConverter.toMemberMissionDTO(memberMission);
+    }
+
+    @Override
+    @Transactional
+    public MemberMissionResponseDTO.MemberMissionPreViewDTO completeMission(Long missionId) {
+        Long memberId=1L;
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new GeneralException(MemberErrorCode.MEMBER_NOT_FOUND));
+        MemberMission memberMission = memberMissionRepository.findByMemberIdAndMissionId(memberId, missionId)
+                .orElseThrow(() -> new GeneralException(MissionErrorCode.MISSION_NOT_FOUND));
+
+        // 이미 완료된 미션이면 예외
+        if (memberMission.isStatus()) {
+            throw new GeneralException(MissionErrorCode.MISSION_COMPLETED_ALREADY);
+        }
+
+        memberMission.setStatus(true);
+
+        return MemberMissionConverter.toMissionPreViewDTO(memberMission);
     }
 }

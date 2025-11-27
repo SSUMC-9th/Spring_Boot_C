@@ -5,10 +5,13 @@ import com.example.umc9th.domain.mission.dto.response.MyMissionResponseDTO;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
@@ -24,4 +27,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
 
     public boolean existsByMemberAndMission(Member member, Mission mission);
 
+    Page<MemberMission> findByMemberAndStatus(Member member, boolean status, PageRequest pageRequest);
+
+    Optional<MemberMission> findByMemberIdAndMissionId(Long memberId, Long missionId);
 }

@@ -9,7 +9,9 @@ import com.example.umc9th.domain.store.dto.request.StoreRequestDTO;
 import com.example.umc9th.domain.store.dto.response.StoreResponseDTO;
 import com.example.umc9th.domain.store.entity.Region;
 import com.example.umc9th.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 import java.util.List;
 
@@ -57,6 +59,32 @@ public class ReviewConverter {
                 .star(dto.star())
                 .store(Store.builder().id(storeId).build())
                 .member(Member.builder().id(dto.memberId()).build())
+                .build();
+    }
+
+    // result -> DTO
+    public static ReviewResponseDTO.ReviewPreViewListDTO toReviewPreViewListDTO(
+            Page<Review> result) {
+
+        return ReviewResponseDTO.ReviewPreViewListDTO.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewPreViewDTO)
+                        .toList()
+                )
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static ReviewResponseDTO.ReviewPreViewDTO toReviewPreViewDTO(Review review) {
+        return ReviewResponseDTO.ReviewPreViewDTO.builder()
+                .ownerNickname(review.getMember().getName())
+                .score(review.getStar())
+                .body(review.getContent())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
                 .build();
     }
 
