@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MissionCommandServiceImpl implements MissionCommandService {
 
     private final MemberRepository memberRepository;
@@ -89,7 +90,21 @@ public class MissionCommandServiceImpl implements MissionCommandService {
                 .build();
     }
 
+    @Override
+    public MissionResDTO.MyMissionDTO completeMission(Long memberId, Long missionId) {
 
+
+        UserMission userMission = userMissionRepository.findByMemberIdAndMissionId(memberId, missionId)
+                .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
+
+
+        if (userMission.getComplete()) {
+            throw new MissionException(MissionErrorCode.MISSION_ALREADY_SUCCESS);
+        }
+        userMission.setComplete(true);
+
+        return MissionConverter.toMyMissionDTO(userMission);
+    }
 
 
 }

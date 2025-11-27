@@ -86,5 +86,17 @@ public class MissionController {
     ) {
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, missionQueryService.getMyMissionList(memberId, page));
     }
+
+    @PatchMapping("/{missionId}/complete")
+    @Operation(summary = "미션 진행 완료로 바꾸기 API", description = "진행 중인 미션을 완료 상태로 변경하고, 변경된 미션 정보를 반환합니다.")
+    public ApiResponse<MissionResDTO.MyMissionDTO> completeMission( // 반환 타입 변경
+                                                                    @PathVariable(name = "missionId") Long missionId,
+                                                                    @RequestParam(name = "memberId") Long memberId
+    ) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                missionCommandService.completeMission(memberId, missionId)
+        );
+    }
 }
 

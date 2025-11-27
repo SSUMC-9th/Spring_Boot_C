@@ -3,6 +3,8 @@ package com.springboot.umc9th.domain.review.service;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.springboot.umc9th.domain.member.entity.Member;
+import com.springboot.umc9th.domain.member.exception.MemberException;
+import com.springboot.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.springboot.umc9th.domain.member.repository.MemberRepository;
 import com.springboot.umc9th.domain.review.converter.ReviewConverter;
 import com.springboot.umc9th.domain.review.dto.MyReviewResponse;
@@ -15,12 +17,11 @@ import com.springboot.umc9th.domain.store.exception.StoreException;
 import com.springboot.umc9th.domain.store.exception.code.StoreErrorCode;
 import com.springboot.umc9th.domain.store.repository.StoreRepository;
 
-import lombok.RequiredArgsConstructor; // [중요] 이거 추가
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // [권장] 추가
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
             builder.and(review.store.local.name.contains(firstQuery));
             builder.and(review.reviewScore.goe(Float.parseFloat(secondQuery)));
         }
-        // searchReview가 QueryDSL용 커스텀 메서드라면 그대로 둡니다.
+
         List<Review> reviewList = reviewRepository.searchReview(builder);
         return reviewList;
     }
@@ -88,14 +89,13 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     }
 
     @Override
-    public ReviewResDTO.ReviewPreViewListDTO findReview(String storeName, Integer page){ // @RequestParam 제거 (Service에는 필요 없음)
-        // 1. 가게 존재 여부 검증
+    public ReviewResDTO.ReviewPreViewListDTO findReview(String storeName, Integer page){
+        // 가게 존재 여부 검증
         Store store = storeRepository.findByStoreName(storeName)
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
-        // 2. 페이징 (page - 1 처리 확인 필요: 프론트가 1부터 주면 -1 해야 함)
-        // 일단 기존 코드 유지: page 그대로 사용
-        PageRequest pageRequest = PageRequest.of(page - 1, 10); // 보통 여기서 -1을 많이 합니다. 확인해보세요!
+        //  페이징
+        PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
         Page<Review> result = reviewRepository.findAllByStore(store, pageRequest);
 
@@ -106,7 +106,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     public ReviewResDTO.MyReviewPreViewListDTO getMyReviewList(Long memberId, Integer page) {
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다."));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
         PageRequest pageRequest = PageRequest.of(page - 1, 10);
 

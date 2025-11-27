@@ -13,9 +13,8 @@ public class MissionConverter {
         return MissionResDTO.MissionDTO.builder()
                 .missionId(mission.getId())
                 .point(mission.getPoint())
-                // 엔티티 필드가 mission_condition (snake_case)라서 롬복 getter도 저렇게 생성됨
                 .missionSpec(mission.getMission_condition())
-                // LocalDateTime -> LocalDate로 변환 (시간 정보 제외하고 날짜만)
+                // LocalDateTime -> LocalDate로 변환
                 .deadline(mission.getDeadline().toLocalDate())
                 .build();
     }

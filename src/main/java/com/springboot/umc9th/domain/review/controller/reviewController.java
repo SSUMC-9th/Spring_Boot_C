@@ -57,7 +57,7 @@ public class reviewController implements ReviewControllerDocs {
             @RequestParam(name = "memberId") Long memberId,
             @CheckPage @RequestParam(name = "page") Integer page // 커스텀 어노테이션 적용
     ) {
-        // Service 호출 (프론트는 1페이지, 로직은 0페이지 처리)
+
         ReviewResDTO.MyReviewPreViewListDTO result = reviewQueryService.getMyReviewList(memberId, page);
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }

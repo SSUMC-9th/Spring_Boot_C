@@ -20,9 +20,7 @@ public class CheckPageValidator implements ConstraintValidator<CheckPage, Intege
 
         if (value == null || value < 1) {
 
-
             context.disableDefaultConstraintViolation();
-
 
             context.buildConstraintViolationWithTemplate(GeneralErrorCode.PAGE_NOT_VALID.toString())
                     .addConstraintViolation();

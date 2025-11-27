@@ -57,9 +57,9 @@ public class ReviewConverter {
 
         return ReviewResDTO.MyReviewPreViewListDTO.builder()
                 .reviewList(myReviewDTOList)
-                .listSize(result.getContent().size()) // 현재 페이지에 나온 개수
-                .totalPage(result.getTotalPages())    // 전체 페이지 수
-                .totalElements(result.getTotalElements()) // 전체 아이템 수
+                .listSize(result.getContent().size())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
                 .isFirst(result.isFirst())
                 .isLast(result.isLast())
                 .build();
@@ -69,10 +69,10 @@ public class ReviewConverter {
     ){
 
         return ReviewResDTO.MyReviewDTO.builder()
-                .storeName(review.getStore().getStoreName()) // Store 엔티티의 이름 가져오기
-                .score(review.getReviewScore())                           // 변환된 점수
-                .body(review.getReviewContent())        // [중요] 엔티티 필드명(reviewContent) 반영
-                .createdAt(LocalDate.from(review.getCreatedAt())) // BaseEntity 시간
+                .storeName(review.getStore().getStoreName())
+                .score(review.getReviewScore())
+                .body(review.getReviewContent())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
                 .build();
     }
 

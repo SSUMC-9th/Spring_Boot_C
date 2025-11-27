@@ -6,7 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
     Page<UserMission> findAllByMemberAndComplete(Member member, Boolean complete, Pageable pageable);
+
+    Optional<UserMission> findByMemberIdAndMissionId(Long memberId, Long missionId);
 
 }
