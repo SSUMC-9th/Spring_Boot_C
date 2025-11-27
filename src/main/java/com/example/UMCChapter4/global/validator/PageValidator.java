@@ -1,5 +1,6 @@
 package com.example.UMCChapter4.global.validator;
 
+import com.example.UMCChapter4.domain.member.exception.code.FoodErrorCode;
 import com.example.UMCChapter4.global.annotation.ValidPage;
 import com.example.UMCChapter4.global.apiPayload.code.PageErrorCode;
 import com.example.UMCChapter4.global.apiPayload.exception.GeneralException;
@@ -7,6 +8,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,10 +21,9 @@ public class PageValidator implements ConstraintValidator<ValidPage, Integer> {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
                     PageErrorCode.INVALID_PAGE_NUMBER.getMessage()).addConstraintViolation();
-
-            return false;
         }
-        return true;
+
+        return pageNumber >= 1;
     }
 
     public static <T> void validatePageRequest(Page<T> result){
@@ -30,6 +31,8 @@ public class PageValidator implements ConstraintValidator<ValidPage, Integer> {
             throw new GeneralException(PageErrorCode.INVALID_PAGE_NUMBER);
         }
     }
+
+
 
     @Override
     public void initialize(ValidPage constraintAnnotation) {

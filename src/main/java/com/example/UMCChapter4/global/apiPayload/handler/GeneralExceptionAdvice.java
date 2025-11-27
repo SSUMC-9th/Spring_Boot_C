@@ -5,6 +5,7 @@ import com.example.UMCChapter4.global.apiPayload.code.BaseErrorCode;
 import com.example.UMCChapter4.global.apiPayload.code.GeneralErrorCode;
 import com.example.UMCChapter4.global.apiPayload.code.PageErrorCode;
 import com.example.UMCChapter4.global.apiPayload.exception.GeneralException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,18 +46,45 @@ public class GeneralExceptionAdvice {
                 );
     }
 
+    // 컨트롤러 메서드에서 @Valid 어노테이션을 사용하여 DTO의 유효성 검사를 수행
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ApiResponse<Map<String, String>>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex
+    ) {
+        // 검사에 실패한 필드와 그에 대한 메시지를 저장하는 Map
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        GeneralErrorCode code = GeneralErrorCode.VALIDATION_FAIL;
+        ApiResponse<Map<String, String>> errorResponse = ApiResponse.onFailure(code, errors);
+
+        // 에러 코드, 메시지와 함께 errors를 반환
+        return ResponseEntity.status(code.getStatus()).body(errorResponse);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(
+    protected ResponseEntity<ApiResponse<Map<String, String>>> handleConstraintViolationException(
             ConstraintViolationException ex
     ) {
 
-        PageErrorCode code = PageErrorCode.INVALID_PAGE_NUMBER;
+        Map<String, String> errors = new HashMap<>();
 
-        return ResponseEntity.status(code.getStatus())
-                .body(ApiResponse.onFailure(
-                                code,
-                                null
-                        )
-                );
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String propertyPath = violation.getPropertyPath().toString();
+            String field = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+
+            String message = violation.getMessage();
+
+            errors.put(field, message);
+        }
+
+        BaseErrorCode code = GeneralErrorCode.VALIDATION_FAIL;
+        ApiResponse<Map<String, String>> errorResponse = ApiResponse.onFailure(code, errors);
+
+        return ResponseEntity.status(code.getStatus()).body(errorResponse);
     }
+
+
 }
