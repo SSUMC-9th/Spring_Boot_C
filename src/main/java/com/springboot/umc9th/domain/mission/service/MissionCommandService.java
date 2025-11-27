@@ -11,4 +11,5 @@ public interface MissionCommandService {
 
     @Transactional
     MissionResDTO.CreateMissionResDTO createMission(Long storeId, MissionReqDTO.CreateDTO dto);
-}
+
+    MissionResDTO.MyMissionDTO completeMission(Long memberId, Long missionId);}

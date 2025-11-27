@@ -1,7 +1,10 @@
 package com.springboot.umc9th.domain.mission.repository;
 
+import com.springboot.umc9th.domain.member.entity.Member;
 import com.springboot.umc9th.domain.mission.entity.Mission;
 import com.springboot.umc9th.domain.mission.entity.mapping.UserMission;
+import com.springboot.umc9th.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +36,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             @Param("cursorId") Long cursorId,
             Pageable pageable
     );
+
+    Page<Mission> findAllByStore(Store store, Pageable pageable);
+
+
 }
+

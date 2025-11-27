@@ -7,22 +7,26 @@ import com.springboot.umc9th.domain.review.entity.Review;
 import com.springboot.umc9th.domain.review.exception.code.ReviewSuccessCode;
 import com.springboot.umc9th.domain.review.service.ReviewCommandService;
 import com.springboot.umc9th.domain.review.service.ReviewQueryService;
+import com.springboot.umc9th.domain.review.service.ReviewQueryServiceImpl;
+import com.springboot.umc9th.global.annotation.CheckPage;
 import com.springboot.umc9th.global.apiPayload.ApiResponse;
 import com.springboot.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping ("/reviews")
 @Tag(name = "리뷰 API", description = "리뷰 생성 및 관리 관련 기능")
-public class reviewController {
+public class reviewController implements ReviewControllerDocs {
 
     private final ReviewQueryService reviewQueryService;
 
@@ -37,14 +41,24 @@ public class reviewController {
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }
 
+//    @GetMapping("/my")
+//    @Operation(summary = "내 리뷰 조회", description = "내가 작성한 리뷰 전체 조회")
+//    public ApiResponse<List<MyReviewResponse>> searchMyReview(
+//            @RequestParam Long memberId,
+//            @RequestParam(required = false) String query,
+//            @RequestParam(required = false) String type
+//    ) {
+//        List<MyReviewResponse> result = reviewQueryService.searchMyReviews(memberId, query, type);
+//        return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
+//    }
+
     @GetMapping("/my")
-    @Operation(summary = "내 리뷰 조회", description = "내가 작성한 리뷰 전체 조회")
-    public ApiResponse<List<MyReviewResponse>> searchMyReview(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) String query,
-            @RequestParam(required = false) String type
+    public ApiResponse<ReviewResDTO.MyReviewPreViewListDTO> getMyReviewList(
+            @RequestParam(name = "memberId") Long memberId,
+            @CheckPage @RequestParam(name = "page") Integer page // 커스텀 어노테이션 적용
     ) {
-        List<MyReviewResponse> result = reviewQueryService.searchMyReviews(memberId, query, type);
+
+        ReviewResDTO.MyReviewPreViewListDTO result = reviewQueryService.getMyReviewList(memberId, page);
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }
     private final ReviewCommandService reviewCommandService;
@@ -59,5 +73,14 @@ public class reviewController {
                 ReviewSuccessCode.CREATED,
                 reviewCommandService.createReview(storeId, dto)
         );
+    }
+    // 가게의 리뷰 목록 조회
+    @GetMapping("/reviews")
+    public ApiResponse<ReviewResDTO.ReviewPreViewListDTO> getReviews(
+            @RequestParam String storeName,
+            @RequestParam(defaultValue = "1")Integer page){
+
+        ReviewSuccessCode code = ReviewSuccessCode.FOUND;
+        return ApiResponse.onSuccess(code, reviewQueryService.findReview(storeName,page));
     }
 }
