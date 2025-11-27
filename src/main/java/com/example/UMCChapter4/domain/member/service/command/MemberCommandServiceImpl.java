@@ -7,7 +7,9 @@ import com.example.UMCChapter4.domain.member.entity.Food;
 import com.example.UMCChapter4.domain.member.entity.Member;
 import com.example.UMCChapter4.domain.member.entity.mapping.MemberFood;
 import com.example.UMCChapter4.domain.member.exception.FoodException;
+import com.example.UMCChapter4.domain.member.exception.MemberException;
 import com.example.UMCChapter4.domain.member.exception.code.FoodErrorCode;
+import com.example.UMCChapter4.domain.member.exception.code.MemberErrorCode;
 import com.example.UMCChapter4.domain.member.repository.FoodRepository;
 import com.example.UMCChapter4.domain.member.repository.MemberFoodRepository;
 import com.example.UMCChapter4.domain.member.repository.MemberRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,9 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     public MemberResDTO.MemberJoinDTO signUp(
             MemberReqDTO.MemberJoinDTO dto
     ){
+        if (memberRepository.findByName(dto.name()).isPresent())
+            throw new MemberException(MemberErrorCode.DUPLICATED);
+
         // 사용자 생성
         Member member = MemberConverter.toMember(dto);
         // DB 적용

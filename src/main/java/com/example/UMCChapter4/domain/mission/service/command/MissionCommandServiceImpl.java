@@ -30,6 +30,7 @@ public class MissionCommandServiceImpl implements MissionCommandService {
         Mission mission = MissionConverter.toMission(ReqDTO, store);
 
         missionRepository.save(mission);
+
         store.getMissionList().add(mission);
 
         return MissionConverter.toMissionCreateDTO(mission);

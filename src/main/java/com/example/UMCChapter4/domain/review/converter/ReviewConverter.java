@@ -5,23 +5,29 @@ import com.example.UMCChapter4.domain.review.dto.ReviewReqDTO;
 import com.example.UMCChapter4.domain.review.dto.ReviewResDTO;
 import com.example.UMCChapter4.domain.review.entity.Review;
 import com.example.UMCChapter4.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ReviewConverter {
 
     //Review -> ReviewSearchDTO
     public static ReviewResDTO.ReviewSearchDTO toSearchDTO(
-            String description,
-            Float rate
-//            List<ReviewPhoto> reviewPhotoList,
-//            List<ReviewReply> reviewReplyList
+            Review review
     ) {
-        return  ReviewResDTO.ReviewSearchDTO.builder()
-                .searchDescription(description)
-                .searchRate(rate)
-//                .searchReviewPhotoList(reviewPhotoList)
-//                .searchReviewReplyList(reviewReplyList)
+        return ReviewResDTO.ReviewSearchDTO.builder()
+                .reviewId(review.getId())
+                .build();
+    }
+
+    //Review -> ReviewSearchMyDTO
+    public static ReviewResDTO.ReviewSearchMyDTO toSearchMyDTO(
+            Review review
+    ) {
+        return ReviewResDTO.ReviewSearchMyDTO.builder()
+                .reviewId(review.getId())
                 .build();
     }
 
@@ -33,7 +39,7 @@ public class ReviewConverter {
     ) {
         return Review.builder()
                 .description(dto.description())
-                .rate(dto.rate())
+                .rate(new BigDecimal(dto.rate()))
                 .store(store)
                 .member(member)
                 .reviewPhotoList(new ArrayList<>())
@@ -50,5 +56,61 @@ public class ReviewConverter {
                 .build();
     }
 
+    // Page<Review> -> ReviewPreViewListDTO
+    public static ReviewResDTO.ReviewPreviewListDTO toReviewPreviewListDTO(
+            Page<Review> result
+    ){
+        return ReviewResDTO.ReviewPreviewListDTO.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewPreviewDTO)
+                        .toList()
+                )
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
 
+    // Review -> ReviewPreviewDTO
+    public static ReviewResDTO.ReviewPreviewDTO toReviewPreviewDTO(
+            Review review
+    ){
+        return ReviewResDTO.ReviewPreviewDTO.builder()
+                .nickname(review.getMember().getName())
+                .rate(review.getRate().toString())
+                .description(review.getDescription())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
+                .build();
+    }
+
+
+    public static ReviewResDTO.ReviewMyPreviewListDTO toReviewMyPreviewListDTO(
+            Page<Review> result
+    ) {
+        return ReviewResDTO.ReviewMyPreviewListDTO.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewMyPreviewDTO)
+                        .toList()
+                )
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewMyPreviewDTO toReviewMyPreviewDTO(
+            Review review
+    ){
+        return ReviewResDTO.ReviewMyPreviewDTO.builder()
+                .nickname(review.getMember().getName())
+                .rate(review.getRate().toString())
+                .description(review.getDescription())
+                .storeName(review.getStore().getName())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
+                .build();
+    }
 }

@@ -2,6 +2,8 @@ package com.example.UMCChapter4.domain.review.repository;
 
 import com.example.UMCChapter4.domain.member.entity.QMember;
 import com.example.UMCChapter4.domain.review.entity.QReview;
+import com.example.UMCChapter4.domain.review.entity.QReviewPhoto;
+import com.example.UMCChapter4.domain.review.entity.QReviewReply;
 import com.example.UMCChapter4.domain.review.entity.Review;
 import com.example.UMCChapter4.domain.store.entity.QLocation;
 import com.example.UMCChapter4.domain.store.entity.QStore;
@@ -41,6 +43,8 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl{
         QReview review = QReview.review;
         QStore store = QStore.store;
         QLocation location = QLocation.location;
+        QReviewPhoto photo = QReviewPhoto.reviewPhoto;
+        QReviewReply reply = QReviewReply.reviewReply;
 
         return queryFactory
                 .selectFrom(review)

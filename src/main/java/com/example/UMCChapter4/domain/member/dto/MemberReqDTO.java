@@ -2,7 +2,7 @@ package com.example.UMCChapter4.domain.member.dto;
 
 import com.example.UMCChapter4.domain.member.enums.Address;
 import com.example.UMCChapter4.domain.member.enums.Gender;
-import com.example.UMCChapter4.global.validator.ExistFoods;
+import com.example.UMCChapter4.global.annotation.ExistFoods;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -17,6 +17,6 @@ public class MemberReqDTO {
             LocalDate birth,
             Address address,
             String specAddress,
-            List<Long> preferCategory
+            @ExistFoods List<Long> preferCategory
     ){}
 }
