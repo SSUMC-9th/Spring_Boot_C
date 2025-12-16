@@ -9,12 +9,19 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberErrorCode implements BaseErrorCode {
 
+    BAD_REQUEST(HttpStatus.BAD_REQUEST,
+            "MEMBER400_1",
+            "잘못된 접근입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND,
             "MEMBER404_1",
             "해당 사용자를 찾지 못했습니다."),
     DUPLICATED(HttpStatus.BAD_REQUEST,
-            "MEMBER400_1",
-            "중복된 이름입니다.");
+            "MEMBER400_2",
+            "중복된 이름입니다."),
+    INVALID(HttpStatus.BAD_REQUEST,
+            "MEMBER400_2",
+            "이메일 혹은 패스워드가 잘못되었습니다."),
+    ;
 
     private final HttpStatus status;
     private final String code;
