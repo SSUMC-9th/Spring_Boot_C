@@ -49,7 +49,7 @@ public class MemberController implements MemberControllerDocs {
         );
     }
 
-    // 로그아웃(session)
+    // 로그아웃
     @PostMapping("/auth/logout")
     public ApiResponse<MemberResDTO.MemberLogoutDTO> logout(
             HttpServletRequest request,

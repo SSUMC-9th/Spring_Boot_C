@@ -24,9 +24,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.stereotype.Service;
@@ -45,6 +48,7 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     private final JwtUtil jwtUtil;
     private final PasswordEncoder encoder;
     private final CookieClearingLogoutHandler cookieClearingLogoutHandler;
+    private final AuthenticationManager authenticationManager;
 
 
     // 회원가입
@@ -120,14 +124,21 @@ public class MemberCommandServiceImpl implements MemberCommandService{
             MemberReqDTO.@Valid MemberLoginDTO dto
     ) {
 
-        // Member 조회
-        Member member = memberRepository.findByEmail(dto.email())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.INVALID)); // 로그인 실패는 INVALID
-
-        // 비밀번호 검증
-        if (!encoder.matches(dto.password(), member.getPassword())){
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        dto.email(),
+                        dto.password()
+                    )
+            );
+        } catch (BadCredentialsException e) {
             throw new MemberException(MemberErrorCode.INVALID);
+        } catch (UsernameNotFoundException e) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND);
         }
+
+        Member member = memberRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.INVALID));
 
         // JWT 토큰 발급용 UserDetails
         CustomUserDetails userDetails = new CustomUserDetails(member);
@@ -135,7 +146,6 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         // 엑세스 토큰 발급
         String accessToken = jwtUtil.createAccessToken(userDetails);
 
-        // DTO 조립
         return MemberConverter.toLoginDTO(member.getId(), accessToken);
     }
 
@@ -144,33 +154,33 @@ public class MemberCommandServiceImpl implements MemberCommandService{
             MemberReqDTO.@Valid MemberLoginDTO dto,
             HttpServletRequest request
     ) {
-        Member member = memberRepository.findByEmail(dto.email())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.INVALID)); // 로그인 실패는 INVALID
-
-        // 비밀번호 검증
-        if (!encoder.matches(dto.password(), member.getPassword())){
-            throw new MemberException(MemberErrorCode.INVALID);
-        }
-
-        CustomUserDetails userDetails = new CustomUserDetails(member);
-
-        // 인증된 Authentication 객체 생성
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities() // { ROLE_USER }
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
+                dto.email(),
+                dto.password()
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            HttpSession session = request.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
-        // JSESSIONID 와 세션 SecurityContext 매칭
-        HttpSession session = request.getSession(true); // 로그인마다 새로운 JSESSIONID
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            System.out.println(session.getId()); // 콘솔에 JSESSIONID 출력
 
-        System.out.println(session.getId());
+        } catch (BadCredentialsException e) {
 
-        return MemberConverter.toLoginDTO(member.getId());
+            throw new MemberException(MemberErrorCode.INVALID);
+        } catch (UsernameNotFoundException e) {
+
+            throw new MemberException(MemberErrorCode.NOT_FOUND);
+        }
+
+        Long memberId = memberRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.INVALID))
+                .getId();
+
+        return MemberConverter.toLoginDTO(memberId);
     }
 
     @Override
