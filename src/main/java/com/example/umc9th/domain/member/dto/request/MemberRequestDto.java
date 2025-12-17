@@ -2,6 +2,7 @@ package com.example.umc9th.domain.member.dto.request;
 
 import com.example.umc9th.domain.member.enums.EGender;
 import com.example.umc9th.domain.member.enums.EPreferenceName;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,6 +14,12 @@ public class MemberRequestDto {
     public record JoinDTO(
             @NotBlank(message = "이름은 공백일 수 없습니다.")
             String name,
+
+            @Email
+            String email,
+
+            @NotBlank
+            String password,
 
             EGender gender,
 
