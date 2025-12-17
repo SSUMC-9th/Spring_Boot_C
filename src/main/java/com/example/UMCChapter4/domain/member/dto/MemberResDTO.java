@@ -11,4 +11,15 @@ public class MemberResDTO {
             Long memberId,
             LocalDateTime createAt
     ){}
+
+    @Builder
+    public record MemberLoginDTO(
+            Long memberId,
+            String accessToken
+    ){}
+
+    @Builder
+    public record MemberLogoutDTO(
+            String sessionId
+    ) {}
 }

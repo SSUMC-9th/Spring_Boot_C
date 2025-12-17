@@ -1,6 +1,7 @@
 package com.example.UMCChapter4.domain.member.entity;
 
 import com.example.UMCChapter4.domain.member.entity.mapping.MemberFood;
+import com.example.UMCChapter4.domain.member.enums.Role;
 import com.example.UMCChapter4.domain.mission.entity.MemberMission;
 import com.example.UMCChapter4.domain.member.entity.mapping.MemberTerm;
 import com.example.UMCChapter4.domain.member.enums.Address;
@@ -49,8 +50,14 @@ public class Member extends BaseEntity {
     @Builder.Default
     private Integer points = 0;
 
-    @Column(name = "email", length = 30) //, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "phone_number", length = 13)
     private String phoneNumber;
