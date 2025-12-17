@@ -17,6 +17,16 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+
+
+jwt:
+  token:
+    secretKey: cK3fwOuo6a8Y52DwwtlsmfKT9KQjaKOZE4mw5pagAPI=
+    expiration:
+      access: 14400000 # 4h
+      refresh: 1209600000 # 14일
+
+
 slack:
   webhook:
     url: ${SLACK_URL}
