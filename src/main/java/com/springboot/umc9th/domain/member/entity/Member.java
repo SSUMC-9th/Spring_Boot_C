@@ -4,6 +4,7 @@ package com.springboot.umc9th.domain.member.entity;
 import com.springboot.umc9th.domain.member.entity.mapping.MemberFood;
 import com.springboot.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.springboot.umc9th.domain.member.enums.Gender;
+import com.springboot.umc9th.domain.member.enums.Role;
 import com.springboot.umc9th.domain.mission.entity.mapping.UserMission;
 import com.springboot.umc9th.domain.review.entity.Review;
 import com.springboot.umc9th.global.BaseEntity.BaseEntity;
@@ -30,6 +31,12 @@ public class Member extends BaseEntity {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(nullable = false)
+    private String password;
+
     @Column(name ="birthday")
     private LocalDate birthday;
 
@@ -44,7 +51,7 @@ public class Member extends BaseEntity {
     private String phone;
 
 //    @Column(name = "email",nullable = false)
-    @Column(name = "email")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(name = "gender", nullable = false)
