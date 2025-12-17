@@ -24,6 +24,7 @@ jwt:
     secretKey: cK3fwOuo6a8Y52DwwtlsmfKT9KQjaKOZE4mw5pagAPI=
     expiration:
       access: 14400000 # 4h
+      refresh: 1209600000 # 14일
 
 
 slack:

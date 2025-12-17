@@ -1,7 +1,5 @@
 package com.example.umc9th.global.auth.jwt;
 
-import com.example.umc9th.global.apiPayload.ApiResponse;
-import com.example.umc9th.global.apiPayload.code.GeneralErrorCode;
 import com.example.umc9th.global.auth.security.CustomUserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
