@@ -8,5 +8,4 @@ public interface MemberCommandService {
     MemberResponseDto.JoinDTO signup(
             MemberRequestDto.JoinDTO dto
     );
-
 }

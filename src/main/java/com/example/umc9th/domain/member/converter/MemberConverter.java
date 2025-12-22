@@ -33,4 +33,10 @@ public class MemberConverter {
                 .gender(dto.gender())
                 .build();
     }
+
+    public static MemberResponseDto.LoginDTO toLoginDTO(String accessToken) {
+        return MemberResponseDto.LoginDTO.builder()
+                .accessToken(accessToken)
+                .build();
+    }
 }

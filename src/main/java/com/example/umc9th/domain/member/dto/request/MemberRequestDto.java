@@ -31,4 +31,11 @@ public class MemberRequestDto {
 
             List<EPreferenceName> preferCategory
     ){}
+
+    public record LoginDTO(
+            @NotBlank
+            String email,
+            @NotBlank
+            String password
+    ){}
 }

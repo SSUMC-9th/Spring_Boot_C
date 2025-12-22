@@ -8,6 +8,7 @@ import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.annotation.CheckPage;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "리뷰", description = "리뷰 관련 API")
 @RequestMapping("/api")
 public class ReviewController implements ReviewControllerDocs {
 
