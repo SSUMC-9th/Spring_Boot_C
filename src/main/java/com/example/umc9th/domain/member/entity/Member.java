@@ -5,6 +5,7 @@ import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.store.entity.Region;
+import com.example.umc9th.global.auth.enums.ERole;
 import com.example.umc9th.global.entity.BaseEntity;
 import com.example.umc9th.domain.member.enums.*;
 
@@ -44,6 +45,16 @@ public class Member extends BaseEntity{
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private ERole role;
+
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -62,9 +73,6 @@ public class Member extends BaseEntity{
     @Column(name = "point", nullable = false)
     @Builder.Default
     private Long point = 0L;
-
-    @Column(name = "email", length = 30, nullable = false)
-    private String email;
 
     @Column(name = "phone_num", length = 15)
     @Builder.Default

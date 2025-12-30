@@ -10,12 +10,14 @@ import com.example.umc9th.domain.mission.service.query.MissionQueryService;
 import com.example.umc9th.global.annotation.CheckPage;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "미션", description = "미션 관련 API")
 @RequestMapping("/api/missions")
 public class MissionController implements MissionControllerDocs {
 
